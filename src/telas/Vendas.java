@@ -7,7 +7,7 @@ package telas;
 
 /**
  *
- * @author Giovane
+ * @author Giovane PSimoes
  */
 public class Vendas extends javax.swing.JFrame {
 

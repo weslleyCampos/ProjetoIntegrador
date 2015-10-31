@@ -156,6 +156,12 @@ ConectaBanco conecta = new ConectaBanco();
 
         lblData.setText("Data");
 
+        txtDataChegada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDataChegadaActionPerformed(evt);
+            }
+        });
+
         btnAdicionarEntrada.setText("Adicionar ao Carrinho");
         btnAdicionarEntrada.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -426,6 +432,10 @@ ConectaBanco conecta = new ConectaBanco();
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         setVisible(false);
     }//GEN-LAST:event_btnSairActionPerformed
+
+    private void txtDataChegadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataChegadaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDataChegadaActionPerformed
 
     /**
      * Realizar a busca do ultimo ID entrada para que novas entradas não se

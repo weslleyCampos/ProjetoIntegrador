@@ -44,7 +44,7 @@ public class PesquisarProdutos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Pesquisa de Produtos");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Produtos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Produtos", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Myriad Pro", 2, 18))); // NOI18N
         jPanel1.setFont(new java.awt.Font("Trebuchet MS", 0, 11)); // NOI18N
 
         jLabelDescricao.setText("Descrição do Produto");

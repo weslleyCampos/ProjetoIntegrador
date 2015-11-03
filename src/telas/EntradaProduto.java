@@ -95,7 +95,7 @@ ConectaBanco conecta = new ConectaBanco();
         setTitle("Entrada de Produtos");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Myriad Pro", 2, 18)); // NOI18N
         jLabel1.setText("Entrada de Produtos");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 

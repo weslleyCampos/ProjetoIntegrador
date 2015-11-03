@@ -49,12 +49,15 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder justification="2" title=" Informa&#xe7;&#xf5;es Priincipais">
-              <Font PropertyName="font" name="Tahoma" size="14" style="1"/>
+            <TitledBorder justification="2" title=" Informa&#xe7;&#xf5;es Principais">
+              <Font PropertyName="font" name="Myriad Pro" size="18" style="2"/>
             </TitledBorder>
           </Border>
         </Property>
       </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=" Informa&#xe7;&#xf5;es Principais"/>
+      </AccessibilityProperties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -125,7 +128,7 @@
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtEnderecoCli" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="102" max="32767" attributes="0"/>
+                  <EmptySpace pref="100" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnIncluirCli" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnLimparCli" alignment="3" min="-2" max="-2" attributes="0"/>

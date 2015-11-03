@@ -91,7 +91,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Trebuchet MS" size="18" style="0"/>
+          <Font name="Myriad Pro" size="18" style="2"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Entrada de Produtos"/>
         <Property name="verticalAlignment" type="int" value="1"/>

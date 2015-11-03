@@ -56,7 +56,9 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder justification="2" position="2" title="Pesquisar Produtos"/>
+            <TitledBorder justification="2" position="2" title="Pesquisar Produtos">
+              <Font PropertyName="font" name="Myriad Pro" size="18" style="2"/>
+            </TitledBorder>
           </Border>
         </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">

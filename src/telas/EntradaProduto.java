@@ -393,12 +393,11 @@ ConectaBanco conecta = new ConectaBanco();
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
-        new PesquisarProdutos().setVisible(true);
-        //Teste de Commit
-//        lblNotificacao.setText("");
-//        txtQtd.setBackground(Color.white);
-//        txtDataChegada.setBackground(Color.white);
-//        preencherTabelaPesquisa("select * from produto where descricao_produto like '%" + txtDescricao.getText() + "%'");
+//        new PesquisarProdutos().setVisible(true);
+        lblNotificacao.setText("");
+        txtQtd.setBackground(Color.white);
+        txtDataChegada.setBackground(Color.white);
+        preencherTabelaPesquisa("select * from produto where descricao_produto like '%" + txtDescricao.getText() + "%'");
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 

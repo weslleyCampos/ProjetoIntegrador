@@ -14,7 +14,8 @@ import utilitarios.ModeloTabela;
 
 /**
  *
- * @author WebSoftware
+ * @author weslley campos
+ * 
  */
 public class PesquisarProdutos extends javax.swing.JFrame {
     

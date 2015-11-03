@@ -142,6 +142,11 @@ ConectaBanco conecta = new ConectaBanco();
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnSair.setText("Sair");
         btnSair.addActionListener(new java.awt.event.ActionListener() {
@@ -388,11 +393,12 @@ ConectaBanco conecta = new ConectaBanco();
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
-//        new PesquisarProdutos().setVisible(true);
-        lblNotificacao.setText("");
-        txtQtd.setBackground(Color.white);
-        txtDataChegada.setBackground(Color.white);
-        preencherTabelaPesquisa("select * from produto where descricao_produto like '%" + txtDescricao.getText() + "%'");
+        new PesquisarProdutos().setVisible(true);
+        //Teste de Commit
+//        lblNotificacao.setText("");
+//        txtQtd.setBackground(Color.white);
+//        txtDataChegada.setBackground(Color.white);
+//        preencherTabelaPesquisa("select * from produto where descricao_produto like '%" + txtDescricao.getText() + "%'");
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -436,6 +442,10 @@ ConectaBanco conecta = new ConectaBanco();
     private void txtDataChegadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataChegadaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDataChegadaActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * Realizar a busca do ultimo ID entrada para que novas entradas não se

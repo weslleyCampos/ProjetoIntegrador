@@ -363,7 +363,14 @@ public class FrameCadProduto extends javax.swing.JFrame {
         int saida =JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION, 
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
         
-        if(JOptionPane.YES_OPTION==saida){
+        if(JOptionPane.YES_OPTION==saida ){
+            try {
+                if(conectar.rs.getInt("QTD_ESTOQUE")>0){
+                    conectar.executaSQL("delete from produto where ID_PRODUTO="+    );
+                }
+            } catch (SQLException ex) {
+                System.out.println("Erro ao obter valores SQL"+ex);
+            }
             
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
@@ -377,7 +384,8 @@ public class FrameCadProduto extends javax.swing.JFrame {
         try {
             conectar.rs.first();
             do {
-                dados.add(new Object[]{conectar.rs.getInt("ID_PRODUTO"), conectar.rs.getInt("ID_MODELO"), conectar.rs.getString("DESCRICAO_PRODUTO"), conectar.rs.getInt("QTD_ESTOQUE")});
+                dados.add(new Object[]{conectar.rs.getInt("ID_PRODUTO"), conectar.rs.getInt("ID_MODELO"), 
+                    conectar.rs.getString("DESCRICAO_PRODUTO"), conectar.rs.getInt("QTD_ESTOQUE")});
             } while (conectar.rs.next());
         } catch (SQLException ex) {
             System.out.println("Erro ao preencher o array " + ex);

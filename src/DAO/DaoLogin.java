@@ -8,8 +8,8 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import Classes.comand.Login;
-import Classes.comand.Estoque;
+import utilitarios.Login;
+import utilitarios.Estoque;
 
 /**
  *

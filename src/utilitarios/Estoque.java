@@ -1,4 +1,4 @@
-package Classes.comand;
+package utilitarios;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.swing.JOptionPane;
@@ -18,37 +18,7 @@ import java.util.ArrayList;
  */
 public class Estoque  {
 
-    /**public Estoque() {
     
-       FrameCadProduto  fram= new FrameCadProduto();
-       
-        
-    }
-    
-    
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.codProd);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final SistemEstoque other = (SistemEstoque) obj;
-        if (!Objects.equals(this.codProd, other.codProd)) {
-            return false;
-        }
-        return true;
-    }
-    **/
     private int codProd=1;
     private String descricao;
     private double preco;

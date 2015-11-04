@@ -6,11 +6,11 @@
 package DAO;
 
 import java.sql.*;
-import Classes.comand.Dados;
+import utilitarios.Dados;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import Classes.comand.Estoque;
+import utilitarios.Estoque;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +40,9 @@ public class Dao_Estoque {
         try {
             String sql = "insert into PRODUTO(DESCRICAO_PRODUTO,ID_MODELO,PRECO_UNITARIO,QTD_MINIMO,QTD_MAXIMO) values(?,?,?,?,?)";
             conecta.conexao();
+            
+            
+            
             stm = conecta.conn.prepareStatement(sql);
             stm.setString(1, obj.getDescricao());
             stm.setInt(2, obj.getIdModelo());
@@ -47,13 +50,15 @@ public class Dao_Estoque {
             stm.setInt(4, obj.getQtdMin());
             stm.setInt(5, obj.getQtdMax());
 
-            stm.executeQuery();
-            System.out.println("CAdastro realizado com Sucesso");
+            stm.executeUpdate();
+            System.out.println("Cadastro realizado com Sucesso");
+            JOptionPane.showMessageDialog(null, "Cadastro realizado com Sucesso");
             stm.close();
             conecta.conn.close();
 
         } catch (SQLException e) {
             System.out.println("Erro ao salvar informações");
+            System.out.println(e.getMessage());
         } catch (NullPointerException e) {
             System.out.println("Dao não inicializado");
         }

@@ -366,7 +366,7 @@ public class FrameCadProduto extends javax.swing.JFrame {
         if(JOptionPane.YES_OPTION==saida ){
             try {
                 if(conectar.rs.getInt("QTD_ESTOQUE")>0){
-                    conectar.executaSQL("delete from produto where ID_PRODUTO="+    );
+                   //    conectar.executaSQL("delete from produto where ID_PRODUTO="+    );
                 }
             } catch (SQLException ex) {
                 System.out.println("Erro ao obter valores SQL"+ex);

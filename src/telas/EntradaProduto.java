@@ -30,16 +30,13 @@ import utilitarios.ModeloTabela;
  */
 public class EntradaProduto extends javax.swing.JFrame {
 
-
 //Declara conexão com banco de dados
-ConectaBanco conecta = new ConectaBanco();
-    
+    ConectaBanco conecta = new ConectaBanco();
 
     //Declaração da variável IDEntrada para capturar e inserir por padrão o ID Entrada
     int idEntrada, codigoVendedor;
-    
 
-    public EntradaProduto() { 
+    public EntradaProduto() {
         initComponents();
         preencherCombo();
         preencherIdEntrada();
@@ -346,10 +343,10 @@ ConectaBanco conecta = new ConectaBanco();
 
     private void btnAdicionarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarEntradaActionPerformed
 
-        if (txtIDProduto.getText().equals("") && txtQtd.getText().equals("")) {
+        if (txtIDProduto.getText().equals("")) {
             lblNotificacao.setForeground(Color.red);
             lblNotificacao.setText("Para adicionar no carrinho, por favor selecione um ou mais produtos!");
-        } else if (txtQtd.getText().equals("") || txtDataChegada.getText().equals("")) {
+        } else if (txtQtd.getText().equals("") && txtDataChegada.getText().equals("")) {
             lblNotificacao.setForeground(Color.red);
             txtQtd.setBackground(Color.yellow);
             txtDataChegada.setBackground(Color.yellow);
@@ -443,7 +440,7 @@ ConectaBanco conecta = new ConectaBanco();
     }//GEN-LAST:event_txtDataChegadaActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
@@ -574,16 +571,14 @@ ConectaBanco conecta = new ConectaBanco();
 
             if (somaQtd > qtdMaxima) {
                 validar = true;
-            
 
-} else {
+            } else {
 
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(FuncoesTelaEntrada.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FuncoesTelaEntrada.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return validar;
     }
@@ -623,32 +618,21 @@ ConectaBanco conecta = new ConectaBanco();
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                
 
-}
+                }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EntradaProduto.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } 
-
-catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EntradaProduto.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } 
-
-catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EntradaProduto.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } 
-
-catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EntradaProduto.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EntradaProduto.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(EntradaProduto.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(EntradaProduto.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(EntradaProduto.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

@@ -371,7 +371,7 @@ public class FrameCadProduto extends javax.swing.JFrame {
         if(JOptionPane.YES_OPTION==saida && des!=""){
             try {
                 if(conectar.rs.getInt("QTD_ESTOQUE")>0){
-                       conectar.executaSQL("delete from produto where DESCRICAO_PRODUTO='" +txtDescricao.getText() );
+                       conectar.executaSQL("delete from produto where DESCRICAO_PRODUTO='" +txtDescricao.getText());
                        JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
                 }
                 else{

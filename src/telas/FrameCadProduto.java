@@ -39,14 +39,14 @@ public class FrameCadProduto extends javax.swing.JFrame {
     Dao_Estoque dao = new Dao_Estoque();
     Estoque est = new Estoque();
     ConectaBanco conectar = new ConectaBanco();
-    
+    String des="";
     /**
      * Creates new form Estoque
      */
     public FrameCadProduto() {
         initComponents();
         conectar.conexao();
-
+        
         //faz o get/ Select da tabela produtos para o cbBox
         conectar.executaSQL("select * from MODELO_PRODUTO order by MODELO");
 
@@ -260,6 +260,11 @@ public class FrameCadProduto extends javax.swing.JFrame {
 
             }
         ));
+        tbExibe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbExibeMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbExibe);
 
         lbTAbela.setText("Tabela de Produtos");
@@ -363,10 +368,14 @@ public class FrameCadProduto extends javax.swing.JFrame {
         int saida =JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION, 
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
         
-        if(JOptionPane.YES_OPTION==saida ){
+        if(JOptionPane.YES_OPTION==saida && des!=""){
             try {
                 if(conectar.rs.getInt("QTD_ESTOQUE")>0){
-                       conectar.executaSQL("delete from produto where ID_PRODUTO="    );
+                       conectar.executaSQL("delete from produto where DESCRICAO_PRODUTO='" +txtDescricao.getText() );
+                       JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Produto não pode ser excluido, necessario zerar estoque!");
                 }
             } catch (SQLException ex) {
                 System.out.println("Erro ao obter valores SQL"+ex);
@@ -374,6 +383,11 @@ public class FrameCadProduto extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tbExibeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbExibeMouseClicked
+        des= ""+tbExibe.getValueAt(tbExibe.getSelectedRow(), 2);
+        txtDescricao.setText(des);
+    }//GEN-LAST:event_tbExibeMouseClicked
 
     public void preencheTabela(String SQL) {
         ArrayList dados = new ArrayList();

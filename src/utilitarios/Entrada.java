@@ -13,12 +13,24 @@ import java.util.Date;
  */
 public class Entrada {
     
-    private int idEntrada;
-    private int idProduto;
-    private String idVendedor;
-    private String dataChegada;
-    private int qtdItem;
-    private String descricaoProduto;
+     int idEntrada;
+     int idProduto;
+     String idVendedor;
+     String dataChegada;
+     int qtdItem;
+     String descricaoProduto;
+     
+     public Entrada(){
+     }
+     
+     public Entrada(int idEntrada, int idProduto, String idVendedor, String dataChegada, int qtdItem, String descricaoProduto){
+         this.idEntrada = idEntrada;
+         this.idProduto = idProduto;
+         this.idVendedor = idVendedor;
+         this.dataChegada = dataChegada;
+         this.qtdItem = qtdItem;
+         this.descricaoProduto = descricaoProduto;
+     }
 
     /**
      * @return the idEntrada
@@ -102,6 +114,10 @@ public class Entrada {
      */
     public void setDescricaoProduto(String descricaoProduto) {
         this.descricaoProduto = descricaoProduto;
+    }
+    
+    public String toString(){
+        return idEntrada + ":" + idProduto + ":" + idVendedor + ":" + descricaoProduto + ":" + dataChegada;
     }
     
     

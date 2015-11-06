@@ -29,7 +29,7 @@ public class ConectaBanco {
     private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=PROJETOINTEGRADOR";
     private String usuario = "pi2";
-    private String senha = "1234";
+    private String senha = "123";
     public Connection conn;
 
     public void conexao() {

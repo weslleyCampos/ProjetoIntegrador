@@ -137,7 +137,8 @@ public class JLog extends javax.swing.JFrame {
             mPrinc.setVisible(true);
             mPrinc.setLocationRelativeTo(null);
             mPrinc.setMaximumSize(null);
-            
+            // fecha a tela de login
+            dispose();
         }
         else {
             

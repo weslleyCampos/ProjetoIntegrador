@@ -57,6 +57,11 @@ public class ModeloTabela extends AbstractTableModel {
         return linha[numCol];
     }
     
-    
+    public void removeProduto(int indiceLinha){
+        // Remove Linha
+        linhas.remove(indiceLinha);
+        // Notifica mudança
+        fireTableRowsDeleted(indiceLinha, indiceLinha);
+    }
 
 }

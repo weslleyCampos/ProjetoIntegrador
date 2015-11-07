@@ -7,8 +7,10 @@ package telas;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import sqlconexao.ConectaBanco;
 import utilitarios.ModeloTabela;
@@ -20,6 +22,8 @@ import utilitarios.ModeloTabela;
 public class Vendas extends javax.swing.JFrame {
 
     ConectaBanco conecta = new ConectaBanco(); // instância da classe de Conexão
+    DecimalFormat df = new DecimalFormat("0.00");
+    ArrayList dadosCarrinho = new ArrayList(); // Array que vai adicionando produtos no Carrinho.
 
     /**
      * Creates new form Vendas
@@ -48,9 +52,9 @@ public class Vendas extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jText_Descricao = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jText_Quantidade = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButton_AddCarrinho = new javax.swing.JButton();
         btn_buscar = new javax.swing.JButton();
         jCombo_Vendedor = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
@@ -59,13 +63,13 @@ public class Vendas extends javax.swing.JFrame {
         jTable_Pesquisa = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        jButton_Sair = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable_Carrinho = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jText_ValorTotal = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        jButton_Excluir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -90,10 +94,10 @@ public class Vendas extends javax.swing.JFrame {
 
         jLabel4.setText("Vendedor");
 
-        jButton1.setText("Adicionar ao Carrinho");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_AddCarrinho.setText("Adicionar ao Carrinho");
+        jButton_AddCarrinho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_AddCarrinhoActionPerformed(evt);
             }
         });
 
@@ -129,7 +133,7 @@ public class Vendas extends javax.swing.JFrame {
                                     .addComponent(jLabel7))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3)
+                                    .addComponent(jText_Quantidade)
                                     .addComponent(jText_ValorUn)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jText_CodProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +143,7 @@ public class Vendas extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jCombo_Vendedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addComponent(jButton1))
+                    .addComponent(jButton_AddCarrinho))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -157,10 +161,10 @@ public class Vendas extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jText_Descricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jText_Quantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(jButton_AddCarrinho)
                     .addComponent(jLabel7)
                     .addComponent(jText_ValorUn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
@@ -184,10 +188,10 @@ public class Vendas extends javax.swing.JFrame {
 
         jLabel6.setText("Carrinho");
 
-        jButton3.setText("Sair");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jButton_Sair.setText("Sair");
+        jButton_Sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jButton_SairActionPerformed(evt);
             }
         });
 
@@ -208,7 +212,12 @@ public class Vendas extends javax.swing.JFrame {
 
         jText_ValorTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jButton2.setText("Excluir do Carrinho");
+        jButton_Excluir.setText("Excluir do Carrinho");
+        jButton_Excluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -220,11 +229,11 @@ public class Vendas extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(jButton_Excluir)
                         .addGap(335, 335, 335)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3))
+                        .addComponent(jButton_Sair))
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
@@ -254,9 +263,9 @@ public class Vendas extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(jButton_Sair)
                     .addComponent(jButton4)
-                    .addComponent(jButton2))
+                    .addComponent(jButton_Excluir))
                 .addContainerGap())
         );
 
@@ -280,18 +289,19 @@ public class Vendas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton_AddCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddCarrinhoActionPerformed
         // Adiciona os valores preenchidos dos campos para a tabela carrinho.
         // Todos os campos devem ser preenchidos
-    }//GEN-LAST:event_jButton1ActionPerformed
+        adicionarCarrinho(dadosCarrinho);
+    }//GEN-LAST:event_jButton_AddCarrinhoActionPerformed
 
     private void jText_DescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jText_DescricaoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jText_DescricaoActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void jButton_SairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SairActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton_SairActionPerformed
 
     private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
 
@@ -301,12 +311,42 @@ public class Vendas extends javax.swing.JFrame {
         // Guarda os valores dos campos da tabela que voce clicou em variáveis
         String idProduto = "" + jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 0);
         String descProduto = "" + jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 1);
-        String valor = ""+ jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 2);
+        String valor = "" + jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 2);
         // Preenche os campos com os valores do produto que foi clicado
         jText_CodProduto.setText(idProduto);
         jText_Descricao.setText(descProduto);
         jText_ValorUn.setText(valor);
     }//GEN-LAST:event_jTable_PesquisaMouseClicked
+
+    private void jButton_ExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExcluirActionPerformed
+
+        excluirCarrinho(dadosCarrinho, jTable_Carrinho.getSelectedRow());
+
+    }//GEN-LAST:event_jButton_ExcluirActionPerformed
+
+    public void excluirCarrinho(ArrayList dados, int linha) {
+        String[] colunas = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"};
+        ModeloTabela carrinho = new ModeloTabela(dados, colunas);
+        carrinho.removeProduto(linha);
+        jTable_Carrinho.setModel(carrinho);
+
+        setModel(carrinho,jTable_Carrinho);
+    }
+
+    public void adicionarCarrinho(ArrayList dados) {
+        //ArrayList dados = new ArrayList(); // onde vai ser listado os itens do campo dos produtos
+        // nome das colunas que serão mostradas na tabela
+        String[] colunas = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"};
+
+        // converte preço e quantidade em int para multiplicar o valor
+        double precoTotalUn = Integer.parseInt(jText_Quantidade.getText()) * Double.parseDouble(jText_ValorUn.getText());
+        dados.add(new Object[]{jText_CodProduto.getText(), jText_Descricao.getText(), jText_Quantidade.getText(), df.format(precoTotalUn)});
+
+        ModeloTabela carrinho = new ModeloTabela(dados, colunas);
+
+        setModel(carrinho, jTable_Carrinho);
+        // Soma o valor total da compra
+    }
 
     public void preencherTabela(String SQL) {
         ArrayList dados = new ArrayList(); // onde vai ser listado os itens do Banco
@@ -326,19 +366,23 @@ public class Vendas extends javax.swing.JFrame {
         }
 
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
-        jTable_Pesquisa.setModel(modelo);
-        jTable_Pesquisa.getColumnModel().getColumn(0).setPreferredWidth(50);
-        jTable_Pesquisa.getColumnModel().getColumn(0).setResizable(false);
+        setModel(modelo, jTable_Pesquisa);
+    }
 
-        jTable_Pesquisa.getColumnModel().getColumn(1).setPreferredWidth(280);
-        jTable_Pesquisa.getColumnModel().getColumn(1).setResizable(false);
+    public void setModel(ModeloTabela modelo, JTable tabela) {
+        tabela.setModel(modelo);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tabela.getColumnModel().getColumn(0).setResizable(false);
 
-        jTable_Pesquisa.getColumnModel().getColumn(2).setPreferredWidth(90);
-        jTable_Pesquisa.getColumnModel().getColumn(2).setResizable(false);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(408);
+        tabela.getColumnModel().getColumn(1).setResizable(false);
 
-        jTable_Pesquisa.getTableHeader().setReorderingAllowed(false);
-        jTable_Pesquisa.setAutoResizeMode(jTable_Pesquisa.AUTO_RESIZE_OFF);
-        jTable_Pesquisa.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(90);
+        tabela.getColumnModel().getColumn(2).setResizable(false);
+
+        tabela.getTableHeader().setReorderingAllowed(false);
+        tabela.setAutoResizeMode(tabela.AUTO_RESIZE_OFF);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**
@@ -397,10 +441,10 @@ public class Vendas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_buscar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton_AddCarrinho;
+    private javax.swing.JButton jButton_Excluir;
+    private javax.swing.JButton jButton_Sair;
     private javax.swing.JComboBox jCombo_Vendedor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -416,9 +460,9 @@ public class Vendas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable_Carrinho;
     private javax.swing.JTable jTable_Pesquisa;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jText_CodProduto;
     private javax.swing.JTextField jText_Descricao;
+    private javax.swing.JTextField jText_Quantidade;
     private javax.swing.JTextField jText_ValorTotal;
     private javax.swing.JTextField jText_ValorUn;
     // End of variables declaration//GEN-END:variables

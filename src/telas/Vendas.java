@@ -5,7 +5,6 @@
  */
 package telas;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -34,6 +33,7 @@ public class Vendas extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         preencherTabela("select * from produto order by ID_PRODUTO");
         preencherCombo();
+        jText_ValorTotal.setText("0.00");
     }
 
     /**
@@ -223,10 +223,9 @@ public class Vendas extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton_Excluir)
@@ -236,14 +235,16 @@ public class Vendas extends javax.swing.JFrame {
                         .addComponent(jButton_Sair))
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jText_ValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jText_ValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -255,13 +256,14 @@ public class Vendas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel8)
-                    .addComponent(jText_ValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jText_ValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Sair)
                     .addComponent(jButton4)
@@ -293,6 +295,7 @@ public class Vendas extends javax.swing.JFrame {
         // Adiciona os valores preenchidos dos campos para a tabela carrinho.
         // Todos os campos devem ser preenchidos
         adicionarCarrinho(dadosCarrinho);
+        atualizaPrecoTotal();
     }//GEN-LAST:event_jButton_AddCarrinhoActionPerformed
 
     private void jText_DescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jText_DescricaoActionPerformed
@@ -319,35 +322,67 @@ public class Vendas extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable_PesquisaMouseClicked
 
     private void jButton_ExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExcluirActionPerformed
-
+        // Exclui um produto
         excluirCarrinho(dadosCarrinho, jTable_Carrinho.getSelectedRow());
-
+        // Atualiza o preço total
+        atualizaPrecoTotal();
     }//GEN-LAST:event_jButton_ExcluirActionPerformed
 
+    /**
+     *
+     * @param total
+     */
+    public void atualizaPrecoTotal() {
+        //String soma;
+        double soma = 0.0;
+
+        for (int i = 0; i < jTable_Carrinho.getRowCount(); i++) {
+                soma += Double.parseDouble(String.valueOf(jTable_Carrinho.getValueAt(i, 3).toString()));
+
+                System.out.println(soma);
+            
+        }
+        jText_ValorTotal.setText(df.format(soma));
+
+    }
+
+    /**
+     *
+     * @param dados
+     * @param linha
+     */
     public void excluirCarrinho(ArrayList dados, int linha) {
+        // Nomeia cada coluna
         String[] colunas = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"};
+        // Cria um modelo de tabela
         ModeloTabela carrinho = new ModeloTabela(dados, colunas);
+        // Chama o método de remover linha do ModeloTabela
         carrinho.removeProduto(linha);
-        jTable_Carrinho.setModel(carrinho);
-
-        setModel(carrinho,jTable_Carrinho);
-    }
-
-    public void adicionarCarrinho(ArrayList dados) {
-        //ArrayList dados = new ArrayList(); // onde vai ser listado os itens do campo dos produtos
-        // nome das colunas que serão mostradas na tabela
-        String[] colunas = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"};
-
-        // converte preço e quantidade em int para multiplicar o valor
-        double precoTotalUn = Integer.parseInt(jText_Quantidade.getText()) * Double.parseDouble(jText_ValorUn.getText());
-        dados.add(new Object[]{jText_CodProduto.getText(), jText_Descricao.getText(), jText_Quantidade.getText(), df.format(precoTotalUn)});
-
-        ModeloTabela carrinho = new ModeloTabela(dados, colunas);
-
+        // Chama o método para setar os novos valores na tabela
         setModel(carrinho, jTable_Carrinho);
-        // Soma o valor total da compra
     }
 
+    /**
+     *
+     * @param dados
+     */
+    public void adicionarCarrinho(ArrayList dados) {
+        // Nome das colunas que serão mostradas na tabela
+        String[] colunas = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"};
+        // Converte preço e quantidade para multiplicar o valor do produto pela quantidade
+        double precoTotalUn = Integer.parseInt(jText_Quantidade.getText()) * Double.parseDouble(jText_ValorUn.getText());
+        // Adiciona no ArrayList um produto novo.
+        dados.add(new Object[]{jText_CodProduto.getText(), jText_Descricao.getText(), jText_Quantidade.getText(), df.format(precoTotalUn)});
+        // Cria o modelo de tabela
+        ModeloTabela carrinho = new ModeloTabela(dados, colunas);
+        // Chama o método para setar os novos valores na tabela
+        setModel(carrinho, jTable_Carrinho);
+    }
+
+    /**
+     *
+     * @param SQL
+     */
     public void preencherTabela(String SQL) {
         ArrayList dados = new ArrayList(); // onde vai ser listado os itens do Banco
         // nome das colunas que serão mostradas na tabela
@@ -364,11 +399,18 @@ public class Vendas extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Não existe produtos com o texto digitado.\n" + ex.getMessage());
         }
-
+        // Cria um modelo de tabela
         ModeloTabela modelo = new ModeloTabela(dados, colunas);
+        // Chama o método para setar os novos valores na tabela
         setModel(modelo, jTable_Pesquisa);
     }
 
+    /**
+     * Atualiza uma Tabela
+     *
+     * @param modelo - é o ModeloTabela
+     * @param tabela - tabela a qual será atualizada
+     */
     public void setModel(ModeloTabela modelo, JTable tabela) {
         tabela.setModel(modelo);
         tabela.getColumnModel().getColumn(0).setPreferredWidth(50);

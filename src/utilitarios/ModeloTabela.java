@@ -40,18 +40,22 @@ public class ModeloTabela extends AbstractTableModel {
         colunas = nomes;
     }
 
+    @Override
     public int getColumnCount() {
         return colunas.length;
     }
     
+    @Override
     public int getRowCount(){
         return linhas.size();
     }
     
+    @Override
     public String getColumnName(int numCol){
         return colunas[numCol];
     }
     
+    @Override
     public Object getValueAt(int numLin, int numCol){
         Object[] linha = (Object[])getLinhas().get(numLin);
         return linha[numCol];

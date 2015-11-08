@@ -23,6 +23,7 @@ public class Vendas extends javax.swing.JFrame {
     ConectaBanco conecta = new ConectaBanco(); // instância da classe de Conexão
     DecimalFormat df = new DecimalFormat("0.00");
     ArrayList dadosCarrinho = new ArrayList(); // Array que vai adicionando produtos no Carrinho.
+    String[] colunasCarrinho = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"}; // Colunas da tabela carrinho
 
     /**
      * Creates new form Vendas
@@ -294,8 +295,12 @@ public class Vendas extends javax.swing.JFrame {
     private void jButton_AddCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddCarrinhoActionPerformed
         // Adiciona os valores preenchidos dos campos para a tabela carrinho.
         // Todos os campos devem ser preenchidos
-        adicionarCarrinho(dadosCarrinho);
-        atualizaPrecoTotal();
+        if (!jText_Quantidade.getText().trim().equals("")) {
+            adicionarCarrinho(dadosCarrinho);
+            atualizaPrecoTotal();
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Preencha todos os campos!");
+        }
     }//GEN-LAST:event_jButton_AddCarrinhoActionPerformed
 
     private void jText_DescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jText_DescricaoActionPerformed
@@ -322,10 +327,14 @@ public class Vendas extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable_PesquisaMouseClicked
 
     private void jButton_ExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExcluirActionPerformed
-        // Exclui um produto
-        excluirCarrinho(dadosCarrinho, jTable_Carrinho.getSelectedRow());
-        // Atualiza o preço total
-        atualizaPrecoTotal();
+        if (jTable_Carrinho.getRowCount() > 0) {
+            // Exclui um produto
+            excluirCarrinho(dadosCarrinho, jTable_Carrinho.getSelectedRow());
+            // Atualiza o preço total
+            atualizaPrecoTotal();
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Carrinho Vazio!");
+        }
     }//GEN-LAST:event_jButton_ExcluirActionPerformed
 
     /**
@@ -334,13 +343,13 @@ public class Vendas extends javax.swing.JFrame {
      */
     public void atualizaPrecoTotal() {
         //String soma;
-        double soma = 0.0;
+        double soma = 0;
+        ModeloTabela carrinho = new ModeloTabela(dadosCarrinho, colunasCarrinho);
+        setModel(carrinho, jTable_Carrinho);
 
-        for (int i = 0; i < jTable_Carrinho.getRowCount(); i++) {
-                soma += Double.parseDouble(String.valueOf(jTable_Carrinho.getValueAt(i, 3).toString()));
-
-                System.out.println(soma);
-            
+        for (int i = 0; i < carrinho.getRowCount(); i++) {
+            String valor = carrinho.getValueAt(i, 3).toString();
+            soma += Double.parseDouble(valor);
         }
         jText_ValorTotal.setText(df.format(soma));
 
@@ -352,14 +361,16 @@ public class Vendas extends javax.swing.JFrame {
      * @param linha
      */
     public void excluirCarrinho(ArrayList dados, int linha) {
-        // Nomeia cada coluna
-        String[] colunas = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"};
-        // Cria um modelo de tabela
-        ModeloTabela carrinho = new ModeloTabela(dados, colunas);
-        // Chama o método de remover linha do ModeloTabela
-        carrinho.removeProduto(linha);
-        // Chama o método para setar os novos valores na tabela
-        setModel(carrinho, jTable_Carrinho);
+        if (linha > -1) {
+            // Cria um modelo de tabela
+            ModeloTabela carrinho = new ModeloTabela(dados, colunasCarrinho);
+            // Chama o método de remover linha do ModeloTabela
+            carrinho.removeProduto(linha);
+            // Chama o método para setar os novos valores na tabela
+            setModel(carrinho, jTable_Carrinho); // Aqui vc coloca o Modelo de Tabela e qual é a jTabel que vc quer usar, nesse caso para excluir a linha
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Escolha uma linha para excluir!");
+        }
     }
 
     /**
@@ -372,7 +383,7 @@ public class Vendas extends javax.swing.JFrame {
         // Converte preço e quantidade para multiplicar o valor do produto pela quantidade
         double precoTotalUn = Integer.parseInt(jText_Quantidade.getText()) * Double.parseDouble(jText_ValorUn.getText());
         // Adiciona no ArrayList um produto novo.
-        dados.add(new Object[]{jText_CodProduto.getText(), jText_Descricao.getText(), jText_Quantidade.getText(), df.format(precoTotalUn)});
+        dados.add(new Object[]{jText_CodProduto.getText(), jText_Descricao.getText(), jText_Quantidade.getText(), precoTotalUn});
         // Cria o modelo de tabela
         ModeloTabela carrinho = new ModeloTabela(dados, colunas);
         // Chama o método para setar os novos valores na tabela

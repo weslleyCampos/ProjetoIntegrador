@@ -7,7 +7,7 @@ package telas;
 
 import utilitarios.ModeloTabela;
 import javax.swing.text.DefaultFormatterFactory;
-import DAO.Dao_Estoque;
+import DAO.EstoqueDAO;
 import java.awt.Choice;
 import java.awt.HeadlessException;
 import javax.swing.JButton;
@@ -36,7 +36,7 @@ import sqlconexao.ConectaBanco;
  */
 public class FrameCadProduto extends javax.swing.JFrame {
 
-    Dao_Estoque dao = new Dao_Estoque();
+    EstoqueDAO dao = new EstoqueDAO();
     Estoque est = new Estoque();
     ConectaBanco conectar = new ConectaBanco();
     String des="";

@@ -4,7 +4,7 @@ import java.util.Objects;
 import javax.swing.JOptionPane;
 import telas.FrameCadProduto;
 //import telas.FrameLog;
-import DAO.Dao_Estoque;
+import DAO.EstoqueDAO;
 import java.util.List;
 import java.util.ArrayList;
 /*

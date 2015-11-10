@@ -29,7 +29,7 @@ import telas.FrameCadProduto;
  *
  * @author rafael Mello
  */
-public class Dao_Estoque {
+public class EstoqueDAO {
 
     ConectaBanco conecta = new ConectaBanco();
 

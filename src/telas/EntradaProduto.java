@@ -5,7 +5,7 @@
  */
 package telas;
 
-import DAO.DaoEntrada;
+import DAO.EntradaDAO;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +23,6 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import sqlconexao.ConectaBanco;
 import utilitarios.Entrada;
-import utilitarios.EntradaEstoque;
 import utilitarios.FuncoesTelaEntrada;
 import utilitarios.ModeloTabela;
 
@@ -36,8 +35,8 @@ public class EntradaProduto extends javax.swing.JFrame {
 //Declara conexão com banco de dados
     ConectaBanco conecta = new ConectaBanco();
 
+    //Declarando ArrayList 
     ArrayList<Entrada> entrarEstoque = new ArrayList();
-    EntradaEstoque ee = new EntradaEstoque();
 
     //Declaração da variável IDEntrada para capturar e inserir por padrão o ID Entrada
     int idEntrada, codigoVendedor;
@@ -55,7 +54,6 @@ public class EntradaProduto extends javax.swing.JFrame {
         } catch (ParseException ex) {
 
         }
-
     }
 
     /**
@@ -338,6 +336,7 @@ public class EntradaProduto extends javax.swing.JFrame {
 
     private void btnAdicionarEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarEntradaActionPerformed
 
+        //Guardando informaçoes dos campos 
         int idEntrada = Integer.parseInt(txtIDEntrada.getText());
         int idProduto = Integer.parseInt(txtIDProduto.getText());
         String idVendedor = (String) cmbVendedor.getSelectedItem();
@@ -345,60 +344,43 @@ public class EntradaProduto extends javax.swing.JFrame {
         int qtdItem = Integer.parseInt(txtQtd.getText());
         String descricaoProduto = txtDescricao.getText();
 
+        //Essa variavel será utilizada para validação de dados
+        boolean validar;
+        
+        //Declarando classe de entrada de estoque
         Entrada e = new Entrada(idEntrada, idProduto, idVendedor, dataChegada, qtdItem, descricaoProduto);
-        adicionarCarrinho(entrarEstoque);
+
+        if (txtIDProduto.getText().equals("")) {
+            lblNotificacao.setForeground(Color.red);
+            lblNotificacao.setText("Para adicionar no carrinho, por favor selecione um ou mais produtos!");
+        } else if (txtQtd.getText().equals("") || txtDataChegada.getText().equals("")) {
+            lblNotificacao.setForeground(Color.red);
+            txtQtd.setBackground(Color.yellow);
+            txtDataChegada.setBackground(Color.yellow);
+            lblNotificacao.setText("Para adicionar no carrinho, por favor informe os valores nos campos indicados!");
+        } else {
+            
+            adicionarCarrinho(entrarEstoque);
 //        entrarEstoque.add(e);
 //        ee.incluiEstoque(e);
 
-//        System.out.println(e);
-//        if (txtIDProduto.getText().equals("")) {
-//            lblNotificacao.setForeground(Color.red);
-//            lblNotificacao.setText("Para adicionar no carrinho, por favor selecione um ou mais produtos!");
-//        } else if (txtQtd.getText().equals("") || txtDataChegada.getText().equals("")) {
-//            lblNotificacao.setForeground(Color.red);
-//            txtQtd.setBackground(Color.yellow);
-//            txtDataChegada.setBackground(Color.yellow);
-//            lblNotificacao.setText("Para adicionar no carrinho, por favor informe os valores nos campos indicados!");
-//        } else {
-//
-//            boolean validar;
-//            int idProduto = 0, qtdItem = 0;
-//
-//            idProduto = Integer.parseInt(txtIDProduto.getText());
-//            qtdItem = Integer.parseInt(txtQtd.getText());
-//
-//            validar = validaQuantidadeMaxima(idProduto, qtdItem);
-//            if (validar == false) {
-//                //adicionar a lista de entrada
-//                //TESTANDO
-//
-//                DaoEntrada salvar = new DaoEntrada();
-//                Entrada ent = new Entrada();
-//
-//                ent.setIdEntrada(Integer.parseInt(txtIDEntrada.getText()));
-//                ent.setIdProduto(Integer.parseInt(txtIDProduto.getText()));
-//                ent.setIdVendedor((String) cmbVendedor.getSelectedItem());
-//                ent.setDataChegada(txtDataChegada.getText());
-//                ent.setQtdItem(Integer.parseInt(txtQtd.getText()));
-//                salvar.SalvarEntrada(ent);
-//
-//                lblNotificacao.setForeground(Color.blue);
-//                txtQtd.setBackground(Color.white);
-//                txtDataChegada.setBackground(Color.white);
-//                lblNotificacao.setText("Produto adicionado na lista de entrada.");
-//                preencherTabelaItens("select p.descricao_produto as [NomeProduto],m.data_chegada as [DataChegada],m.qtd as [qtd] "
-//                        + "from movimentacao_entrada as m inner join produto as p "
-//                        + "on m.ID_PRODUTO = p.ID_PRODUTO where m.ID_ENTRADA =" + txtIDEntrada.getText() + "");
-//            } else {
-//                lblNotificacao.setForeground(Color.red);
-//                lblNotificacao.setText("A quantidade informada irá ultrapassar a máxima desejada para esse produto!");
-//            }
-//        }
+            System.out.println(e);
+
+            validar = validaQuantidadeMaxima(idProduto, qtdItem);
+            if (validar == false) {
+                //adicionar a lista de entrada
+                //TESTANDO
+
+            } else {
+                lblNotificacao.setForeground(Color.red);
+                lblNotificacao.setText("A quantidade informada irá ultrapassar a máxima desejada para esse produto!");
+            }
+        }
+
     }//GEN-LAST:event_btnAdicionarEntradaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 
-//        new PesquisarProdutos().setVisible(true);
         lblNotificacao.setText("");
         txtQtd.setBackground(Color.white);
         txtDataChegada.setBackground(Color.white);
@@ -427,7 +409,6 @@ public class EntradaProduto extends javax.swing.JFrame {
 
     private void cmbVendedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbVendedorMouseClicked
 
-
     }//GEN-LAST:event_cmbVendedorMouseClicked
 
     private void cmbVendedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cmbVendedorFocusLost
@@ -435,7 +416,6 @@ public class EntradaProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbVendedorFocusLost
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-
 
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
@@ -467,7 +447,7 @@ public class EntradaProduto extends javax.swing.JFrame {
         tabela.getColumnModel().getColumn(0).setPreferredWidth(408);
         tabela.getColumnModel().getColumn(0).setResizable(false);
 
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(50);
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(100);
         tabela.getColumnModel().getColumn(1).setResizable(false);
 
         tabela.getTableHeader().setReorderingAllowed(false);

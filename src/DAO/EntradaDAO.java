@@ -7,6 +7,7 @@ package DAO;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -17,7 +18,7 @@ import utilitarios.Entrada;
  *
  * @author Weslley
  */
-public class DaoEntrada {
+public class EntradaDAO {
 
     ConectaBanco conecta = new ConectaBanco();
 
@@ -25,7 +26,13 @@ public class DaoEntrada {
 
     int codigoVendedor;
 
-    public Entrada SalvarEntrada(Entrada salvar) {
+//    public Entrada salvarEntrada(ArrayList<Entrada> colecao){
+//        for(){
+//            
+//        }
+//    }
+    
+    public Entrada salvarEntrada(Entrada salvar) {
 
         buscarCodigoVendedor(salvar.getIdVendedor());
 

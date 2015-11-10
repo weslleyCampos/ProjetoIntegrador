@@ -15,7 +15,7 @@ import utilitarios.Estoque;
  *
  * @author rafael Mello
  */
-public class DaoLogin {
+public class LoginDAO {
     
     
     Connection con;

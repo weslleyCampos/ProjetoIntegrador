@@ -26,12 +26,15 @@ public class EntradaDAO {
 
     int codigoVendedor;
 
+    public EntradaDAO() {
+
+    }
+
 //    public Entrada salvarEntrada(ArrayList<Entrada> colecao){
 //        for(){
 //            
 //        }
 //    }
-    
     public Entrada salvarEntrada(Entrada salvar) {
 
         buscarCodigoVendedor(salvar.getIdVendedor());
@@ -57,10 +60,11 @@ public class EntradaDAO {
         return salvar;
     }
     /*
-    * Para encontrar o ID_Vendedor e realizar o vinculo
-    * essa função realiza a busca de acordo com o nome marcado na ComboBox
-    * retornando o ID da tabela de Vendedor
-    */
+     * Para encontrar o ID_Vendedor e realizar o vinculo
+     * essa função realiza a busca de acordo com o nome marcado na ComboBox
+     * retornando o ID da tabela de Vendedor
+     */
+
     public void buscarCodigoVendedor(String nome) {
         conecta.conexao();
         conecta.executaSQL("select * from vendedor where nome_vendedor = '" + nome + "'");
@@ -72,7 +76,49 @@ public class EntradaDAO {
         }
         conecta.desconecta();
     }
-    
 
+    /**
+     * Realizar a busca do ultimo ID entrada para que novas entradas não se
+     * repitam com entrada anterior... Em desenvolvimento...
+     */
+    public int preencherIdEntrada(int idEntrada) {
+        conecta.conexao();
+        conecta.executaSQL("select max(id_entrada + 1)[max] from movimentacao_entrada");
+        try {
+            conecta.rs.first();
+            idEntrada = conecta.rs.getInt("max");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao buscar ultimo  IdEntrada.\n" + ex);
+        }
+        conecta.desconecta();
+        return idEntrada;
+    }
+
+    /*Função para validação para calcular se quantidade a ser inserida
+     irá ultrapassar a quantidade maxima exigida*/
+    public boolean validaQuantidadeMaxima(int idProduto, int qtdItem) {
+
+        int qtdAtual = 0, somaQtd = 0, qtdMaxima;
+        boolean validar = false;
+        conecta.conexao();
+        conecta.executaSQL("select * from produto where id_produto =" + idProduto + "");
+        try {
+            conecta.rs.first();
+            qtdAtual = conecta.rs.getInt("QTD_ESTOQUE");
+            qtdMaxima = conecta.rs.getInt("QTD_MAXIMO");
+            somaQtd = qtdAtual + qtdItem;
+
+            if (somaQtd > qtdMaxima) {
+                validar = true;
+
+            } else {
+
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha validação de quantidade maxima.\n" + ex);
+        }
+        return validar;
+    }
 
 }

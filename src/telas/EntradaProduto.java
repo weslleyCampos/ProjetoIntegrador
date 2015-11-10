@@ -16,7 +16,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import sqlconexao.ConectaBanco;
@@ -33,7 +35,8 @@ public class EntradaProduto extends javax.swing.JFrame {
 
 //Declara conexão com banco de dados
     ConectaBanco conecta = new ConectaBanco();
-    
+
+    ArrayList<Entrada> entrarEstoque = new ArrayList();
     EntradaEstoque ee = new EntradaEstoque();
 
     //Declaração da variável IDEntrada para capturar e inserir por padrão o ID Entrada
@@ -341,11 +344,13 @@ public class EntradaProduto extends javax.swing.JFrame {
         String dataChegada = txtDataChegada.getText();
         int qtdItem = Integer.parseInt(txtQtd.getText());
         String descricaoProduto = txtDescricao.getText();
-        
+
         Entrada e = new Entrada(idEntrada, idProduto, idVendedor, dataChegada, qtdItem, descricaoProduto);
-        ee.incluiEstoque(e);
-        
-        System.out.println(e);
+        adicionarCarrinho(entrarEstoque);
+//        entrarEstoque.add(e);
+//        ee.incluiEstoque(e);
+
+//        System.out.println(e);
 //        if (txtIDProduto.getText().equals("")) {
 //            lblNotificacao.setForeground(Color.red);
 //            lblNotificacao.setText("Para adicionar no carrinho, por favor selecione um ou mais produtos!");
@@ -445,6 +450,30 @@ public class EntradaProduto extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
 
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    public void adicionarCarrinho(ArrayList dados) {
+        // Nome das colunas que serão mostradas na tabela
+        String[] colunas = new String[]{"Descricao Produto", "Quantidade"};
+        // Adiciona no ArrayList um produto novo.
+        dados.add(new Object[]{txtDescricao.getText(), txtQtd.getText()});
+        // Cria o modelo de tabela
+        ModeloTabela carrinho = new ModeloTabela(dados, colunas);
+        // Chama o método para setar os novos valores na tabela
+        setModel(carrinho, jTableItensEntrada);
+    }
+
+    public void setModel(ModeloTabela modelo, JTable tabela) {
+        tabela.setModel(modelo);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(408);
+        tabela.getColumnModel().getColumn(0).setResizable(false);
+
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(50);
+        tabela.getColumnModel().getColumn(1).setResizable(false);
+
+        tabela.getTableHeader().setReorderingAllowed(false);
+        tabela.setAutoResizeMode(tabela.AUTO_RESIZE_OFF);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
 
     /**
      * Realizar a busca do ultimo ID entrada para que novas entradas não se

@@ -48,6 +48,7 @@ public class ConectaBanco {
             System.setProperty("jdbc.Drivers", driver);
 //            conexão SQL server
 //            conn = DriverManager.getConnection(caminho, usuario, senha);
+  
             
 //             conexão mySQL
             conn1 = DriverManager.getConnection(caminho1, usuario1, senha1);

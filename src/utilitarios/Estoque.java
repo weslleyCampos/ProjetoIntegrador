@@ -2,7 +2,7 @@ package utilitarios;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.swing.JOptionPane;
-import telas.FrameCadProduto;
+import telas.CadProduto;
 //import telas.FrameLog;
 import DAO.EstoqueDAO;
 import java.util.List;
@@ -18,13 +18,37 @@ import java.util.ArrayList;
  */
 public class Estoque  {
 
-    
+    EstoqueDAO daoest= new EstoqueDAO();
     private int codProd=1;
     private String descricao;
     private double preco;
     private int qtdMax;
     private int qtdMin;
     private int idModelo;
+
+    public Estoque() {
+    }
+
+    public Estoque(String descricao, double preco, int qtdMax, int qtdMin, int idModelo) {
+        this.descricao = descricao;
+        this.preco = preco;
+        this.qtdMax = qtdMax;
+        this.qtdMin = qtdMin;
+        this.idModelo = idModelo;
+    }
+// metodo de conexão com banco de dados via objeto.
+    public void salvarestoque(Object esyo){
+         try {
+                daoest.salvarDados((Estoque) esyo);
+            } catch (Exception ex) {
+                System.out.println("Erro ao incluir dados"+ex);
+            }        
+    }
+    
+    public void deletarProduto(Estoque esto){
+      daoest.delete( esto);
+        
+    }
 
     public Integer getCodProd() {
         return codProd;
@@ -73,6 +97,8 @@ public class Estoque  {
     public void setIdModelo(int idModelo) {
         this.idModelo = idModelo;
     }
+
+  
 
 
     

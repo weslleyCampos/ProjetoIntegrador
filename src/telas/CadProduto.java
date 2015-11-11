@@ -41,6 +41,7 @@ public class CadProduto extends javax.swing.JFrame {
     ConectaBanco conectar = new ConectaBanco();
     String des = "";
    public  int idmod;
+   public  int idprod;
 
     /**
      * Creates new form Estoque
@@ -60,7 +61,7 @@ public class CadProduto extends javax.swing.JFrame {
             do {
 
                 CbModelo.addItem(conectar.rs.getString("MODELO"));
-                cbCodProd.addItem(conectar.rs.getString("ID_MODELO"));
+                cbCodMod.addItem(conectar.rs.getString("ID_MODELO"));
 
             } while (conectar.rs.next());
 
@@ -104,7 +105,7 @@ public class CadProduto extends javax.swing.JFrame {
         btnFechar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         btnMod = new javax.swing.JButton();
-        cbCodProd = new javax.swing.JComboBox();
+        cbCodMod = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbExibe = new javax.swing.JTable();
         lbTAbela = new javax.swing.JLabel();
@@ -171,8 +172,8 @@ public class CadProduto extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,7 +188,7 @@ public class CadProduto extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbCodProd, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(cbCodMod, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,7 +211,7 @@ public class CadProduto extends javax.swing.JFrame {
                         .addComponent(btnMod)
                         .addGap(18, 18, 18)
                         .addComponent(btnFechar)))
-                .addGap(28, 28, 28))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,7 +221,7 @@ public class CadProduto extends javax.swing.JFrame {
                     .addComponent(CbModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel10)
-                    .addComponent(cbCodProd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbCodMod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -284,16 +285,16 @@ public class CadProduto extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(59, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lbTAbela)
                         .addGap(20, 20, 20)
                         .addComponent(btnAtualiza)
                         .addGap(18, 18, 18)
                         .addComponent(btnDelete))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(65, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,24 +337,19 @@ public class CadProduto extends javax.swing.JFrame {
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
         if (JOptionPane.YES_OPTION == saida && des != "") {
-            try {
-                if (conectar.rs.getInt("QTD_ESTOQUE") > 0) {
-                    conectar.executaSQL("delete from produto where DESCRICAO_PRODUTO='" + txtDescricao.getText());
-                    JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Produto não pode ser excluido, necessario zerar estoque!");
-                }
-            } catch (SQLException ex) {
-                System.out.println("Erro ao obter valores SQL" + ex);
-            }
+            Estoque in = new Estoque(des, saida, saida, NORMAL, idmod);
+            est.deletarProduto(in);
 
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tbExibeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbExibeMouseClicked
         des = "" + tbExibe.getValueAt(tbExibe.getSelectedRow(), 2);
+        idmod=(int) tbExibe.getValueAt(tbExibe.getSelectedRow(),1);
+        idprod=(int) tbExibe.getValueAt(tbExibe.getSelectedRow(),0);
         txtDescricao.setText(des);
-        cbCodProd.setName(des);
+        cbCodMod.setSelectedIndex(idmod);
+        
     }//GEN-LAST:event_tbExibeMouseClicked
 
     private void btnModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModActionPerformed
@@ -385,7 +381,7 @@ public class CadProduto extends javax.swing.JFrame {
             double preco = (Double.parseDouble(txtPreco.getText()));
             int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
             int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
-            String modPro = (cbCodProd.getSelectedItem().toString());
+            String modPro = (cbCodMod.getSelectedItem().toString());
             
             Estoque e= new Estoque(Descricao, preco, qtdmaximo, qtdminimo,buscarCodProduto(modPro));
                   est.salvarestoque(e);
@@ -408,7 +404,7 @@ public class CadProduto extends javax.swing.JFrame {
     public void preencheTabela(String SQL) {
         ArrayList dados = new ArrayList();
 
-        String[] Colunas = new String[]{"ID", "MODELO", "DESCRIÇÃO", "QUANTIDADE EM ESTOQUE"};
+        String[] Colunas = new String[]{"ID", "MODELO", "    DESCRIÇÃO","QUANTIDADE EM ESTOQUE"};
         conectar.executaSQL(SQL);
 
         try {
@@ -422,9 +418,9 @@ public class CadProduto extends javax.swing.JFrame {
         }
         ModeloTabela model = new ModeloTabela(dados, Colunas);
         tbExibe.setModel(model);
-        tbExibe.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tbExibe.getColumnModel().getColumn(0).setPreferredWidth(30);
         tbExibe.getColumnModel().getColumn(0).setResizable(false);
-        tbExibe.getColumnModel().getColumn(1).setPreferredWidth(145);
+        tbExibe.getColumnModel().getColumn(1).setPreferredWidth(65);
         tbExibe.getColumnModel().getColumn(1).setResizable(false);
         tbExibe.getColumnModel().getColumn(2).setPreferredWidth(180);
         tbExibe.getColumnModel().getColumn(2).setResizable(false);
@@ -552,7 +548,7 @@ public class CadProduto extends javax.swing.JFrame {
     private javax.swing.JButton btnFechar;
     private javax.swing.JButton btnMod;
     private javax.swing.JButton btnSlavar;
-    private javax.swing.JComboBox cbCodProd;
+    private javax.swing.JComboBox cbCodMod;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;

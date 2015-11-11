@@ -21,6 +21,11 @@ import javax.swing.JOptionPane;
  * Padrão de usuario: pi2
  * Padrão de senha: 123 
  * Nome do Banco ProjetoIntegrador
+ * "com.mysql.jdbc.SQLServerDriver";
+ * 
+ * "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+ * jdbc:sqlserver://localhost:1433;databaseName=PROJETOINTEGRADOR";
+ * pi2
  */
 public class ConectaBanco {
 
@@ -31,11 +36,22 @@ public class ConectaBanco {
     private String usuario = "pi2";
     private String senha = "123";
     public Connection conn;
+    public Connection conn1;
+    private String driver1 = "com.mysql.jdbc.SQLServerDriver";
+    private String caminho1 = "jdbc:mysql://localhost:3306/projetointegrador";
+    private String usuario1 = "root";
+    private String senha1 = "1234";
+    
 
     public void conexao() {
         try {
             System.setProperty("jdbc.Drivers", driver);
-            conn = DriverManager.getConnection(caminho, usuario, senha);
+//            conexão SQL server
+//            conn = DriverManager.getConnection(caminho, usuario, senha);
+            
+//             conexão mySQL
+            conn1 = DriverManager.getConnection(caminho1, usuario1, senha1);
+            
             //JOptionPane.showMessageDialog(null, "Conectado");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro de conexão\nErro: " + ex);

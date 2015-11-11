@@ -185,7 +185,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void subMenuclieneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuclieneActionPerformed
         // TODO add your handling code here:
-        new FrameCadProduto().setVisible(true);
+        new CadProduto().setVisible(true);
 
 //        Cliente telacli = new Cliente();
 //        telacli.setVisible(true);

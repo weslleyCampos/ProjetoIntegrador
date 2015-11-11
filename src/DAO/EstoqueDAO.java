@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.RootPaneUI;
 import sqlconexao.ConectaBanco;
-import telas.FrameCadProduto;
+import telas.CadProduto;
 
 /**
  *
@@ -31,6 +31,7 @@ import telas.FrameCadProduto;
  */
 public class EstoqueDAO {
 
+    int codProduto;
     ConectaBanco conecta = new ConectaBanco();
 
     public Estoque salvarDados(Estoque obj) throws Exception {
@@ -40,9 +41,7 @@ public class EstoqueDAO {
         try {
             String sql = "insert into PRODUTO(DESCRICAO_PRODUTO,ID_MODELO,PRECO_UNITARIO,QTD_MINIMO,QTD_MAXIMO) values(?,?,?,?,?)";
             conecta.conexao();
-            
-            
-            
+
             stm = conecta.conn.prepareStatement(sql);
             stm.setString(1, obj.getDescricao());
             stm.setInt(2, obj.getIdModelo());
@@ -78,6 +77,24 @@ public class EstoqueDAO {
         return consultarEstoque(pesq);
 
     }
+    
+    public void delete(Estoque del){
+        
+        try {
+                if (conecta.rs.getInt("QTD_ESTOQUE") ==0) {
+                    conecta.executaSQL("delete from produto where id_produto= ?'" );
+                    
+                    JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Produto não pode ser excluido, necessario zerar estoque!");
+                }
+            } catch (SQLException ex) {
+                System.out.println("Erro ao obter valores SQL" + ex);
+            }
+    }
+    
+    //associa o nome do modelo ao codigo do produto
+   
 
     
 }

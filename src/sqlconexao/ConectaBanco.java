@@ -51,7 +51,7 @@ public class ConectaBanco {
   
             
 //             conexão mySQL
-            conn1 = DriverManager.getConnection(caminho1, usuario1, senha1);
+            conn = DriverManager.getConnection(caminho1, usuario1, senha1);
             
             //JOptionPane.showMessageDialog(null, "Conectado");
         } catch (SQLException ex) {

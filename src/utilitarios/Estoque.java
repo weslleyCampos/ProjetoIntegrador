@@ -45,10 +45,12 @@ public class Estoque  {
             }        
     }
     
-    public void deletarProduto(Estoque esto){
-      daoest.delete( esto);
+    public void atualizaDados(Object refresh){
         
+        daoest.atualizaDados((Estoque) refresh);
     }
+    
+   
 
     public Integer getCodProd() {
         return codProd;

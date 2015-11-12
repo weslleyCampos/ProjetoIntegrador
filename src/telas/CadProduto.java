@@ -40,8 +40,8 @@ public class CadProduto extends javax.swing.JFrame {
     Estoque est = new Estoque();
     ConectaBanco conectar = new ConectaBanco();
     String des = "";
-   public  int idmod;
-   public  int idprod;
+    public int idmod;
+    public int idprod;
 
     /**
      * Creates new form Estoque
@@ -51,7 +51,7 @@ public class CadProduto extends javax.swing.JFrame {
         conectar.conexao();
 
         //faz o get/ Select da tabela produtos para o cbBox
-        conectar.executaSQL("select * from MODELO_PRODUTO order by MODELO");
+        conectar.executaSQL("select * from MODELO_PRODUTO order by Id_modelo");
 
         CbModelo.removeAllItems();
         //conectar.executaSQL("select * from MODELO_PRODUTO order by ID_MODELO");
@@ -61,7 +61,7 @@ public class CadProduto extends javax.swing.JFrame {
             do {
 
                 CbModelo.addItem(conectar.rs.getString("MODELO"));
-                cbCodMod.addItem(conectar.rs.getString("ID_MODELO"));
+                cbCodMod.addItem(conectar.rs.getInt("ID_MODELO"));
 
             } while (conectar.rs.next());
 
@@ -70,6 +70,7 @@ public class CadProduto extends javax.swing.JFrame {
         } catch (NullPointerException ex) {
             System.out.println("não CB não inicializado ");
         }
+
         tbExibe.setVisible(false);
         btnAtualiza.setVisible(false);
         btnDelete.setVisible(false);
@@ -118,6 +119,11 @@ public class CadProduto extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, java.awt.Color.darkGray));
 
+        CbModelo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CbModeloMouseClicked(evt);
+            }
+        });
         CbModelo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CbModeloActionPerformed(evt);
@@ -165,6 +171,12 @@ public class CadProduto extends javax.swing.JFrame {
         btnMod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModActionPerformed(evt);
+            }
+        });
+
+        cbCodMod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCodModActionPerformed(evt);
             }
         });
 
@@ -271,6 +283,11 @@ public class CadProduto extends javax.swing.JFrame {
         lbTAbela.setText("Tabela de Produtos");
 
         btnAtualiza.setText("Atualizar");
+        btnAtualiza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizaActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -313,43 +330,59 @@ public class CadProduto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
- public int buscarCodProduto( String modelo){
+ public int buscarCodProduto(String modelo) {
         conectar.conexao();
-        conectar.executaSQL("Select * from modelo_produto where modelo= '"+modelo+"" );
-        
+        conectar.executaSQL("Select * from modelo_produto where modelo= '" + modelo + "");
+
         try {
             conectar.rs.first();
-            
-            idmod= conectar.rs.getInt("id_modelo");
+
+            idmod = conectar.rs.getInt("id_modelo");
+            cbCodMod.setSelectedIndex(idmod);
         } catch (SQLException ex) {
-            System.out.println("Não foi possivel obter codigo do produto"+ ex);
-        }
-        catch (NullPointerException e){
-            System.out.println("não inicializado"+e);
-            
+            System.out.println("Não foi possivel obter codigo do produto" + ex);
+        } catch (NullPointerException e) {
+            System.out.println("não inicializado" + e);
+
         }
         conectar.desconecta();
-            return idmod;
+        return idmod;
     }
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         int saida = JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        if (JOptionPane.YES_OPTION == saida && des != "") {
-            Estoque in = new Estoque(des, saida, saida, NORMAL, idmod);
-            est.deletarProduto(in);
-
-        }
+//        if (JOptionPane.YES_OPTION == saida && des != "") {
+//            
+////            est.deletarProduto(idprod);
+//             try {
+////                if (conecta.rs.getInt("QTD_ESTOQUE") ==0) {
+//                    conectar.executaSQL("delete from produto where ID_PRODUTO= "+ );
+//                    
+//                    JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
+////                } else {
+////                    JOptionPane.showMessageDialog(null, "Produto não pode ser excluido, necessario zerar estoque!");
+////                }
+//            }
+//        catch( StackOverflowError ex){
+//            System.out.println("Memoria no limite");
+//                    }
+//        catch( NullPointerException ex){
+//            System.out.println("Dao não inicializado ");
+//        }
+//
+//        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tbExibeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbExibeMouseClicked
+    idprod=  (int) tbExibe.getValueAt(tbExibe.getSelectedRow(), 0);
+        idmod = (int) tbExibe.getValueAt(tbExibe.getSelectedRow(), 1);
         des = "" + tbExibe.getValueAt(tbExibe.getSelectedRow(), 2);
-        idmod=(int) tbExibe.getValueAt(tbExibe.getSelectedRow(),1);
-        idprod=(int) tbExibe.getValueAt(tbExibe.getSelectedRow(),0);
+
         txtDescricao.setText(des);
         cbCodMod.setSelectedIndex(idmod);
-        
+
     }//GEN-LAST:event_tbExibeMouseClicked
 
     private void btnModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModActionPerformed
@@ -382,14 +415,13 @@ public class CadProduto extends javax.swing.JFrame {
             int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
             int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
             String modPro = (cbCodMod.getSelectedItem().toString());
-            
-            Estoque e= new Estoque(Descricao, preco, qtdmaximo, qtdminimo,buscarCodProduto(modPro));
-                  est.salvarestoque(e);
+
+            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo, buscarCodProduto(modPro));
+            est.salvarestoque(e);
 //          
 
         }
-                    
-            
+
 
     }//GEN-LAST:event_btnSlavarActionPerformed
 
@@ -401,10 +433,33 @@ public class CadProduto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CbModeloActionPerformed
 
+    private void cbCodModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCodModActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbCodModActionPerformed
+
+    private void CbModeloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CbModeloMouseClicked
+        // TODO add your handling code here:
+
+        String saida = CbModelo.getSelectedItem().toString();
+
+        cbCodMod.setSelectedItem(buscarCodProduto(saida));
+
+    }//GEN-LAST:event_CbModeloMouseClicked
+
+    private void btnAtualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizaActionPerformed
+        // TODO add your handling code here:
+       
+          
+        est.setDescricao(txtDescricao.getText());
+        est.atualizaDados(est);
+      
+        
+    }//GEN-LAST:event_btnAtualizaActionPerformed
+
     public void preencheTabela(String SQL) {
         ArrayList dados = new ArrayList();
 
-        String[] Colunas = new String[]{"ID", "MODELO", "    DESCRIÇÃO","QUANTIDADE EM ESTOQUE"};
+        String[] Colunas = new String[]{"ID", "MODELO", "    DESCRIÇÃO", "QUANTIDADE EM ESTOQUE"};
         conectar.executaSQL(SQL);
 
         try {

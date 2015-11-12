@@ -93,6 +93,25 @@ public class EstoqueDAO {
             }
     }
     
+    public Estoque atualizaDados(Estoque at){
+          PreparedStatement stm = null;
+           conecta.conexao();
+        try {
+            String sql=("update produto set DESCRICAO_PRODUTO=? ");
+            stm = conecta.conn.prepareStatement(sql);
+            stm.setString(1, at.getDescricao());
+            stm.execute();
+            JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso !!");
+        } catch (SQLException ex) {
+            System.out.println("não foi possivel atualização ");
+        }
+        catch (NullPointerException ex){
+            System.out.println("dao Atualizar não inicializado");
+            
+        }
+        return at;
+    }
+
     //associa o nome do modelo ao codigo do produto
    
 

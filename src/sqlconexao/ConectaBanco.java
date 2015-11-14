@@ -16,16 +16,12 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Weslley.Campos 
- * Conexão com Banco de Dados 
- * Padrão de usuario: pi2
- * Padrão de senha: 123 
- * Nome do Banco ProjetoIntegrador
+ * @author Weslley.Campos Conexão com Banco de Dados Padrão de usuario: pi2
+ * Padrão de senha: 123 Nome do Banco ProjetoIntegrador
  * "com.mysql.jdbc.SQLServerDriver";
- * 
+ *
  * "com.microsoft.sqlserver.jdbc.SQLServerDriver";
- * jdbc:sqlserver://localhost:1433;databaseName=PROJETOINTEGRADOR";
- * pi2
+ * jdbc:sqlserver://localhost:1433;databaseName=PROJETOINTEGRADOR"; pi2
  */
 public class ConectaBanco {
 
@@ -41,21 +37,23 @@ public class ConectaBanco {
     private String caminho1 = "jdbc:mysql://localhost:3306/projetointegrador";
     private String usuario1 = "root";
     private String senha1 = "1234";
-    
 
     public void conexao() {
         try {
             System.setProperty("jdbc.Drivers", driver);
-//            conexão SQL server
-            conn = DriverManager.getConnection(caminho, usuario, senha);
-  
-            
-//             conexão mySQL
-//            conn = DriverManager.getConnection(caminho1, usuario1, senha1);
-            
+
+            //conexão mySQL
+            conn = DriverManager.getConnection(caminho1, usuario1, senha1);
+
             //JOptionPane.showMessageDialog(null, "Conectado");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro de conexão\nErro: " + ex);
+            try {
+                //conexão SQL server
+                conn = DriverManager.getConnection(caminho, usuario, senha);
+                
+            } catch (SQLException exx) {
+                JOptionPane.showMessageDialog(null, "Erro de conexão\nErro: " + exx);
+            }
         }
     }
 

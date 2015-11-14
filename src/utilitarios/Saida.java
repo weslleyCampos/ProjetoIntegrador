@@ -5,6 +5,8 @@
  */
 package utilitarios;
 
+import java.sql.Date;
+
 /**
  *
  * @author Giovane
@@ -13,15 +15,21 @@ public class Saida {
 
     private int idSaida;
     private String idVendedor;
+    private int idProduto;
     private String dataSaida;
     private int qtdItem;
     private String descricaoProduto;
     private double precoTotal;
 
-    public Saida(){
+    public Saida(String idVendedor, String data, int qtdItem, String descricao, double precoTotal) {
         
+        this.idVendedor = idVendedor;
+        this.dataSaida = data;
+        this.qtdItem = qtdItem;
+        this.descricaoProduto = descricao;
+        this.precoTotal = precoTotal;
     }
-    
+
     public int getIdSaida() {
         return idSaida;
     }
@@ -68,6 +76,14 @@ public class Saida {
 
     public void setPrecoTotal(double precoTotal) {
         this.precoTotal = precoTotal;
+    }
+
+    public int getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
     }
 
 }

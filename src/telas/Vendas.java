@@ -6,12 +6,16 @@
 package telas;
 
 import DAO.VendasDAO;
+import java.util.Date;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import utilitarios.ModeloTabela;
+import utilitarios.Saida;
 
 /**
  *
@@ -24,7 +28,8 @@ public class Vendas extends javax.swing.JFrame {
     ArrayList dadosCarrinho = new ArrayList(); // Array que vai adicionando produtos no Carrinho.
     String[] colunasCarrinho = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"}; // Colunas da tabela carrinho
     VendasDAO vendasDAO = new VendasDAO();
-    
+    int idSaida = 0;
+
     /**
      * Creates new form Vendas
      */
@@ -62,7 +67,7 @@ public class Vendas extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton_Sair = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jButton_ConfirmVenda = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable_Carrinho = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
@@ -173,10 +178,10 @@ public class Vendas extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Confirmar Venda");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButton_ConfirmVenda.setText("Confirmar Venda");
+        jButton_ConfirmVenda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButton_ConfirmVendaActionPerformed(evt);
             }
         });
 
@@ -220,7 +225,7 @@ public class Vendas extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton_Excluir)
                         .addGap(335, 335, 335)
-                        .addComponent(jButton4)
+                        .addComponent(jButton_ConfirmVenda)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton_Sair))
                     .addComponent(jScrollPane2)
@@ -259,7 +264,7 @@ public class Vendas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Sair)
-                    .addComponent(jButton4)
+                    .addComponent(jButton_ConfirmVenda)
                     .addComponent(jButton_Excluir))
                 .addContainerGap())
         );
@@ -326,9 +331,33 @@ public class Vendas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_ExcluirActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButton_ConfirmVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConfirmVendaActionPerformed
+        // Testa se o carrinho não está limpo
+        if (jTable_Carrinho.getRowCount() > 0) {
+            for (int i = 0; i < jTable_Carrinho.getRowCount(); i++) {
+                //Pegando informação dos campos da tabela
+                String vendedor = jCombo_Vendedor.getSelectedItem().toString(); //Pego o nome do vendedor
+                String dataAtual = getDateTime(); // Pegando a data do sistema
+                int qtdItem = Integer.parseInt(jTable_Carrinho.getValueAt(i, 2).toString()); //Pega a quantidade
+                String descricao = jTable_Carrinho.getValueAt(i, 1).toString(); //Pega o modelo
+                double preco = (Double) jTable_Carrinho.getValueAt(i, 3); //Pega o modelo
+
+                Saida s = new Saida(vendedor, dataAtual, qtdItem, descricao, preco);
+                vendasDAO.confirmaVenda(s);
+            }
+
+            // limpa o carrinho
+            while (jTable_Carrinho.getRowCount() > 0) {
+                excluirCarrinho(dadosCarrinho, 0);
+            }
+            //Limpa o Valor Total
+            jText_ValorTotal.setText(null);
+            
+            JOptionPane.showMessageDialog(rootPane, "Venda Confirmada!");
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Carrinho Vazio!");
+        }
+    }//GEN-LAST:event_jButton_ConfirmVendaActionPerformed
 
     /**
      *
@@ -346,6 +375,12 @@ public class Vendas extends javax.swing.JFrame {
         }
         jText_ValorTotal.setText(df.format(soma));
 
+    }
+
+    public String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     /**
@@ -382,8 +417,6 @@ public class Vendas extends javax.swing.JFrame {
         // Chama o método para setar os novos valores na tabela
         vendasDAO.setModel(carrinho, jTable_Carrinho);
     }
-
-   
 
     /**
      * @param args the command line arguments
@@ -422,8 +455,8 @@ public class Vendas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton_AddCarrinho;
+    private javax.swing.JButton jButton_ConfirmVenda;
     private javax.swing.JButton jButton_Excluir;
     private javax.swing.JButton jButton_Sair;
     private javax.swing.JComboBox jCombo_Vendedor;

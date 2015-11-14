@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package utilitarios;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,25 +13,25 @@ import java.util.Date;
  * @author Weslley.Campos
  */
 public class Entrada {
-    
-     int idEntrada;
-     int idProduto;
-     String idVendedor;
-     String dataChegada;
-     int qtdItem;
-     String descricaoProduto;
-     
-     public Entrada(){
-     }
-     
-     public Entrada(int idEntrada, int idProduto, String idVendedor, String dataChegada, int qtdItem, String descricaoProduto){
-         this.idEntrada = idEntrada;
-         this.idProduto = idProduto;
-         this.idVendedor = idVendedor;
-         this.dataChegada = dataChegada;
-         this.qtdItem = qtdItem;
-         this.descricaoProduto = descricaoProduto;
-     }
+
+    int idEntrada;
+    int idProduto;
+    String idVendedor;
+    String dataChegada;
+    int qtdItem;
+    String descricaoProduto;
+
+    public Entrada() {
+    }
+
+    public Entrada(int idEntrada, int idProduto, String idVendedor, String dataChegada, int qtdItem, String descricaoProduto) {
+        this.idEntrada = idEntrada;
+        this.idProduto = idProduto;
+        this.idVendedor = idVendedor;
+        this.dataChegada = dataChegada;
+        this.qtdItem = qtdItem;
+        this.descricaoProduto = descricaoProduto;
+    }
 
     /**
      * @return the idEntrada
@@ -115,10 +116,9 @@ public class Entrada {
     public void setDescricaoProduto(String descricaoProduto) {
         this.descricaoProduto = descricaoProduto;
     }
-    
-    public String toString(){
+
+    public String toString() {
         return idEntrada + ":" + idProduto + ":" + idVendedor + ":" + descricaoProduto + ":" + dataChegada;
     }
-    
-    
+
 }

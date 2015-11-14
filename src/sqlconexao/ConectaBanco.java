@@ -47,11 +47,11 @@ public class ConectaBanco {
         try {
             System.setProperty("jdbc.Drivers", driver);
 //            conexão SQL server
-//            conn = DriverManager.getConnection(caminho, usuario, senha);
+            conn = DriverManager.getConnection(caminho, usuario, senha);
   
             
 //             conexão mySQL
-            conn = DriverManager.getConnection(caminho1, usuario1, senha1);
+//            conn = DriverManager.getConnection(caminho1, usuario1, senha1);
             
             //JOptionPane.showMessageDialog(null, "Conectado");
         } catch (SQLException ex) {

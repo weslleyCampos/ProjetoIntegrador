@@ -7,15 +7,10 @@ package DAO;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import sqlconexao.ConectaBanco;
-import utilitarios.ModeloTabela;
 import utilitarios.Saida;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,8 +39,6 @@ public class VendasDAO {
             pst = conecta.conn.prepareStatement(sql);
 
             //PreparedStatement pst = conecta.conn.prepareStatement("insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)");
-            //pst.setInt(1, venda.getIdSaida());
-            //pst.setInt(1, venda.getIdProduto());
             pst.setInt(1, codigoVendedor);
             pst.setString(2, venda.getDescricaoProduto());
             pst.setDate(3, formataData(venda.getDataSaida()));
@@ -54,32 +47,11 @@ public class VendasDAO {
             pst.executeUpdate();
             pst.close();
             conecta.conn.close();
-
+            
 //            JOptionPane.showMessageDialog(null, "Produto adicionado no carrinho");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro " + ex);
         }
-    }
-
-    /**
-     * Converte data para joga no banco
-     * @param data
-     * @return
-     * @throws Exception 
-     */
-    public static java.sql.Date formataData(String data) {
-        if (data == null || data.equals("")) {
-            return null;
-        }
-
-        java.sql.Date date = null;
-        try {
-            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-        return date;
     }
 
     public void buscarCodigoVendedor(String nome) {
@@ -96,6 +68,7 @@ public class VendasDAO {
 
     /**
      * Preenche o ComboBox com os nomes dos vendedores
+     * @param comboBox
      */
     public void preencherCombo(JComboBox comboBox) {
 
@@ -113,53 +86,24 @@ public class VendasDAO {
     }
 
     /**
-     * Preenche uma tabela
+     * Converte data para joga no banco
      *
-     * @param SQL String com comando em SQL
-     * @param tabela Tabela a ser preenchida
+     * @param data
+     * @return
      */
-    public void preencherTabela(String SQL, JTable tabela) {
-        ArrayList dados = new ArrayList(); // onde vai ser listado os itens do Banco
-        // nome das colunas que serão mostradas na tabela
-        String[] colunas = new String[]{"Código", "Descricao Produto", "Preço Unitario", "Qtd Atual de Estoque"};
-        conecta.executaSQL(SQL);
-        try {
-            conecta.rs.first();
-            do {
-                /*Adiciona no objeto da Tabela, todas as informações que deseja apresentar na tabela de 
-                 *Pesquisa dos produtos
-                 */
-                dados.add(new Object[]{conecta.rs.getInt("ID_PRODUTO"), conecta.rs.getString("DESCRICAO_PRODUTO"), conecta.rs.getString("PRECO_UNITARIO"), conecta.rs.getInt("QTD_ESTOQUE")});
-            } while (conecta.rs.next());
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Não existe produtos com o texto digitado.\n" + ex.getMessage());
+    public static java.sql.Date formataData(String data) {
+        if (data == null || data.equals("")) {
+            return null;
         }
-        // Cria um modelo de tabela
-        ModeloTabela modelo = new ModeloTabela(dados, colunas);
-        // Chama o método para setar os novos valores na tabela
-        setModel(modelo, tabela);
 
+        java.sql.Date date = null;
+        try {
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return date;
     }
 
-    /**
-     * Atualiza uma Tabela
-     *
-     * @param modelo - é o ModeloTabela
-     * @param tabela - tabela a qual será atualizada
-     */
-    public void setModel(ModeloTabela modelo, JTable tabela) {
-        tabela.setModel(modelo);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tabela.getColumnModel().getColumn(0).setResizable(false);
-
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(408);
-        tabela.getColumnModel().getColumn(1).setResizable(false);
-
-        tabela.getColumnModel().getColumn(2).setPreferredWidth(90);
-        tabela.getColumnModel().getColumn(2).setResizable(false);
-
-        tabela.getTableHeader().setReorderingAllowed(false);
-        tabela.setAutoResizeMode(tabela.AUTO_RESIZE_OFF);
-        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    }
 }

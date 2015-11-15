@@ -6,6 +6,7 @@
 package telas;
 
 import DAO.VendasDAO;
+import java.sql.SQLException;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import sqlconexao.ConectaBanco;
 import utilitarios.ModeloTabela;
 import utilitarios.Saida;
 
@@ -29,14 +31,15 @@ public class Vendas extends javax.swing.JFrame {
     String[] colunasCarrinho = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"}; // Colunas da tabela carrinho
     VendasDAO vendasDAO = new VendasDAO();
     int idSaida = 0;
-
+    ConectaBanco conecta = new ConectaBanco();
+    
     /**
      * Creates new form Vendas
      */
     public Vendas() {
         initComponents();
         this.setLocationRelativeTo(null);
-        vendasDAO.preencherTabela("select * from produto order by ID_PRODUTO", jTable_Pesquisa);
+        preencherTabela("select * from PRODUTO order by ID_PRODUTO", jTable_Pesquisa);
         vendasDAO.preencherCombo(jCombo_Vendedor);
         jText_ValorTotal.setText("0.00");
     }
@@ -342,7 +345,13 @@ public class Vendas extends javax.swing.JFrame {
                 String descricao = jTable_Carrinho.getValueAt(i, 1).toString(); //Pega o modelo
                 double preco = (Double) jTable_Carrinho.getValueAt(i, 3); //Pega o modelo
 
-                Saida s = new Saida(vendedor, dataAtual, qtdItem, descricao, preco);
+                Saida s = new Saida();
+                s.setIdVendedor(vendedor);
+                s.setDataSaida(dataAtual);
+                s.setQtdItem(qtdItem);
+                s.setDescricaoProduto(descricao);
+                s.setPrecoTotal(preco);
+                
                 vendasDAO.confirmaVenda(s);
             }
 
@@ -367,7 +376,7 @@ public class Vendas extends javax.swing.JFrame {
         //String soma;
         double soma = 0;
         ModeloTabela carrinho = new ModeloTabela(dadosCarrinho, colunasCarrinho);
-        vendasDAO.setModel(carrinho, jTable_Carrinho);
+        setModel(carrinho, jTable_Carrinho);
 
         for (int i = 0; i < carrinho.getRowCount(); i++) {
             String valor = carrinho.getValueAt(i, 3).toString();
@@ -395,12 +404,42 @@ public class Vendas extends javax.swing.JFrame {
             // Chama o método de remover linha do ModeloTabela
             carrinho.removeProduto(linha);
             // Chama o método para setar os novos valores na tabela
-            vendasDAO.setModel(carrinho, jTable_Carrinho); // Aqui vc coloca o Modelo de Tabela e qual é a jTabel que vc quer usar, nesse caso para excluir a linha
+            setModel(carrinho, jTable_Carrinho); // Aqui vc coloca o Modelo de Tabela e qual é a jTabel que vc quer usar, nesse caso para excluir a linha
         } else {
             JOptionPane.showMessageDialog(rootPane, "Escolha uma linha para excluir!");
         }
     }
 
+     /**
+     * Preenche uma tabela
+     *
+     * @param SQL String com comando em SQL
+     * @param tabela Tabela a ser preenchida
+     */
+    public void preencherTabela(String SQL, JTable tabela) {
+        ArrayList dados = new ArrayList(); // onde vai ser listado os itens do Banco
+        // nome das colunas que serão mostradas na tabela
+        String[] colunas = new String[]{"Código", "Descricao Produto", "Preço Unitario", "Qtd Atual de Estoque"};
+        conecta.conexao();
+        conecta.executaSQL(SQL);
+        try {
+            conecta.rs.first();
+            do {
+                /*Adiciona no objeto da Tabela, todas as informações que deseja apresentar na tabela de 
+                 *Pesquisa dos produtos
+                 */
+                dados.add(new Object[]{conecta.rs.getInt("ID_PRODUTO"), conecta.rs.getString("DESCRICAO_PRODUTO"), conecta.rs.getString("PRECO_UNITARIO"), conecta.rs.getInt("QTD_ESTOQUE")});
+            } while (conecta.rs.next());
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não existe produtos com o texto digitado.\n" + ex.getMessage());
+        }
+        // Cria um modelo de tabela
+        ModeloTabela modelo = new ModeloTabela(dados, colunas);
+        // Chama o método para setar os novos valores na tabela
+        setModel(modelo, tabela);
+
+    }
+    
     /**
      *
      * @param dados
@@ -415,9 +454,31 @@ public class Vendas extends javax.swing.JFrame {
         // Cria o modelo de tabela
         ModeloTabela carrinho = new ModeloTabela(dados, colunas);
         // Chama o método para setar os novos valores na tabela
-        vendasDAO.setModel(carrinho, jTable_Carrinho);
+        setModel(carrinho, jTable_Carrinho);
     }
 
+    /**
+     * Atualiza uma Tabela
+     *
+     * @param modelo - é o ModeloTabela
+     * @param tabela - tabela a qual será atualizada
+     */
+    public void setModel(ModeloTabela modelo, JTable tabela) {
+        tabela.setModel(modelo);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tabela.getColumnModel().getColumn(0).setResizable(false);
+
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(408);
+        tabela.getColumnModel().getColumn(1).setResizable(false);
+
+        tabela.getColumnModel().getColumn(2).setPreferredWidth(90);
+        tabela.getColumnModel().getColumn(2).setResizable(false);
+
+        tabela.getTableHeader().setReorderingAllowed(false);
+        tabela.setAutoResizeMode(tabela.AUTO_RESIZE_OFF);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+    
     /**
      * @param args the command line arguments
      */

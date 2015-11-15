@@ -5,7 +5,11 @@
  */
 package utilitarios;
 
-import java.sql.Date;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,15 +25,7 @@ public class Saida {
     private String descricaoProduto;
     private double precoTotal;
 
-    public Saida(String idVendedor, String data, int qtdItem, String descricao, double precoTotal) {
-        
-        this.idVendedor = idVendedor;
-        this.dataSaida = data;
-        this.qtdItem = qtdItem;
-        this.descricaoProduto = descricao;
-        this.precoTotal = precoTotal;
-    }
-
+    
     public int getIdSaida() {
         return idSaida;
     }
@@ -47,7 +43,7 @@ public class Saida {
     }
 
     public String getDataSaida() {
-        return dataSaida;
+        return  formataData(dataSaida).toString();
     }
 
     public void setDataSaida(String dataSaida) {
@@ -86,4 +82,24 @@ public class Saida {
         this.idProduto = idProduto;
     }
 
+    /**
+     * Converte data para joga no banco
+     * @param data
+     * @return
+     * @throws Exception 
+     */
+    public static java.sql.Date formataData(String data) {
+        if (data == null || data.equals("")) {
+            return null;
+        }
+
+        java.sql.Date date = null;
+        try {
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return date;
+    }
 }

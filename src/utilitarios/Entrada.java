@@ -20,17 +20,19 @@ public class Entrada {
     String dataChegada;
     int qtdItem;
     String descricaoProduto;
+    private int somaQtd;
 
     public Entrada() {
     }
 
-    public Entrada(int idEntrada, int idProduto, String idVendedor, String dataChegada, int qtdItem, String descricaoProduto) {
+    public Entrada(int idEntrada, int idProduto, String idVendedor, String dataChegada, int qtdItem, String descricaoProduto, int somaQtd) {
         this.idEntrada = idEntrada;
         this.idProduto = idProduto;
         this.idVendedor = idVendedor;
         this.dataChegada = dataChegada;
         this.qtdItem = qtdItem;
         this.descricaoProduto = descricaoProduto;
+        this.somaQtd = somaQtd;
     }
 
     /**
@@ -119,6 +121,20 @@ public class Entrada {
 
     public String toString() {
         return idEntrada + ":" + idProduto + ":" + idVendedor + ":" + descricaoProduto + ":" + dataChegada;
+    }
+
+    /**
+     * @return the somaQtd
+     */
+    public int getSomaQtd() {
+        return somaQtd;
+    }
+
+    /**
+     * @param somaQtd the somaQtd to set
+     */
+    public void setSomaQtd(int somaQtd) {
+        this.somaQtd = somaQtd;
     }
 
 }

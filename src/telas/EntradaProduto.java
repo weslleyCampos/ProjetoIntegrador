@@ -364,19 +364,23 @@ public class EntradaProduto extends javax.swing.JFrame {
             String dataChegada = txtDataChegada.getText();
             int qtdItem = Integer.parseInt(txtQtd.getText());
             String descricaoProduto = txtDescricao.getText();
+            int somaQtd = entradaDAO.calcularQuantidadeEstoque(idProduto, qtdItem);
+            
 
             //Declarando classe de entrada de estoque
-            Entrada e = new Entrada(idEntrada, idProduto, idVendedor, dataChegada, qtdItem, descricaoProduto);
+            Entrada e = new Entrada(idEntrada, idProduto, idVendedor, dataChegada, qtdItem, descricaoProduto,somaQtd);
 
             //RETIRAR
             System.out.println(e);
+            System.out.println(somaQtd);
 
             validar = entradaDAO.validaQuantidadeMaxima(idProduto, qtdItem);
             if (validar == true) {
                 lblNotificacao.setForeground(Color.red);
                 lblNotificacao.setText("A quantidade informada irá ultrapassar a máxima desejada para esse produto!");
             }
-            adicionarCarrinho(entrarEstoque);
+            entrarEstoque.add(e);
+//            adicionarCarrinho(entrarEstoque);
         }
     }//GEN-LAST:event_btnAdicionarEntradaActionPerformed
 
@@ -417,7 +421,7 @@ public class EntradaProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbVendedorFocusLost
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-
+        entradaDAO.salvarEntrada(entrarEstoque);
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
@@ -437,7 +441,7 @@ public class EntradaProduto extends javax.swing.JFrame {
         // Nome das colunas que serão mostradas na tabela
         String[] colunas = new String[]{"Descricao Produto", "Quantidade"};
         // Adiciona no ArrayList um produto novo.
-        dados.add(new Object[]{txtDescricao.getText(), txtQtd.getText()});
+        dados.add(new String[]{txtDescricao.getText(), txtQtd.getText()});
         // Cria o modelo de tabela
         ModeloTabela carrinho = new ModeloTabela(dados, colunas);
         // Chama o método para setar os novos valores na tabela
@@ -470,7 +474,6 @@ public class EntradaProduto extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar os vendedores!\n" + ex.getMessage());
         }
-
     }
 
     //Preenchimento da tabela de Pesquisa de Produtos
@@ -523,7 +526,6 @@ public class EntradaProduto extends javax.swing.JFrame {
         txtDescricao.setText(null);
         txtQtd.setText(null);
         txtDataChegada.setText(null);
-
     }
 
     /*

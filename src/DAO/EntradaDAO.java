@@ -23,6 +23,7 @@ public class EntradaDAO {
     ConectaBanco conecta = new ConectaBanco();
 
     PreparedStatement pst = null;
+    PreparedStatement pst1 = null;
 
     int codigoVendedor;
 
@@ -30,41 +31,63 @@ public class EntradaDAO {
 
     }
 
-//    public Entrada salvarEntrada(ArrayList<Entrada> colecao){
-//        for(){
-//            
-//        }
-//    }
-    public Entrada salvarEntrada(Entrada salvar) {
+    public void salvarEntrada(ArrayList<Entrada> colecao) {
 
-        buscarCodigoVendedor(salvar.getIdVendedor());
-
+        String sqlInsere = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
+        String sqlUpdate = "update produto set (QTD_ESTOQUE)=? where ID_PRODUTO=?";
+        conecta.conexao();
         try {
-            String sql = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
-            conecta.conexao();
-            pst = conecta.conn.prepareStatement(sql);
-            //PreparedStatement pst = conecta.conn.prepareStatement("insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)");
-            pst.setInt(1, salvar.getIdEntrada());
-            pst.setInt(2, salvar.getIdProduto());
-            pst.setInt(3, codigoVendedor);
-            pst.setString(4, salvar.getDataChegada());
-            pst.setInt(5, salvar.getQtdItem());
-            pst.executeUpdate();
+            pst = conecta.conn.prepareStatement(sqlInsere);
+            pst1 = conecta.conn.prepareStatement(sqlUpdate);
+            for (Entrada e : colecao) {
+                pst.setInt(1, e.getIdEntrada());
+                pst.setInt(2, e.getIdProduto());
+                pst.setInt(3, 1);
+                pst.setString(4, e.getDataChegada());
+                pst.setInt(5, e.getQtdItem());
+                pst.executeUpdate();
+                pst1.setInt(1, e.getSomaQtd());
+                pst1.setInt(2, e.getIdProduto());
+                pst1.executeUpdate();                
+            }
             pst.close();
             conecta.conn.close();
-
-//            JOptionPane.showMessageDialog(null, "Produto adicionado no carrinho");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Deu ruim" + ex);
+            Logger.getLogger(EntradaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return salvar;
+
     }
+
+//    public Entrada salvarEntrada(Entrada salvar) {
+//
+//        buscarCodigoVendedor(salvar.getIdVendedor());
+//
+//        try {
+//            String sql = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
+//            conecta.conexao();
+//            pst = conecta.conn.prepareStatement(sql);
+//            //PreparedStatement pst = conecta.conn.prepareStatement("insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)");
+//            pst.setInt(1, salvar.getIdEntrada());
+//            pst.setInt(2, salvar.getIdProduto());
+//            pst.setInt(3, codigoVendedor);
+//            pst.setString(4, salvar.getDataChegada());
+//            pst.setInt(5, salvar.getQtdItem());
+//            pst.executeUpdate();
+//            pst.close();
+//            conecta.conn.close();
+//
+////            JOptionPane.showMessageDialog(null, "Produto adicionado no carrinho");
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Deu ruim" + ex);
+//        }
+//        return salvar;
+//    }
+
     /*
      * Para encontrar o ID_Vendedor e realizar o vinculo
      * essa função realiza a busca de acordo com o nome marcado na ComboBox
      * retornando o ID da tabela de Vendedor
      */
-
     public void buscarCodigoVendedor(String nome) {
         conecta.conexao();
         conecta.executaSQL("select * from vendedor where nome_vendedor = '" + nome + "'");
@@ -119,6 +142,28 @@ public class EntradaDAO {
             JOptionPane.showMessageDialog(null, "Falha validação de quantidade maxima.\n" + ex);
         }
         return validar;
+    }
+
+    /*
+     Essa função irá buscar o valor do produto atual e somar a quantidade que deverá ser inserida
+     Retornando o valor total para ser guardada na classe Entrada
+     */
+    public int calcularQuantidadeEstoque(int idProduto, int qtdItem) {
+
+        int qtdAtual = 0, somaQtd = 0, qtdMaxima;
+
+        conecta.conexao();
+        conecta.executaSQL("select * from produto where id_produto =" + idProduto + "");
+        try {
+            conecta.rs.first();
+            qtdAtual = conecta.rs.getInt("QTD_ESTOQUE");
+            qtdMaxima = conecta.rs.getInt("QTD_MAXIMO");
+            somaQtd = qtdAtual + qtdItem;
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha validação de quantidade maxima.\n" + ex);
+        }
+        return somaQtd;
     }
 
 }

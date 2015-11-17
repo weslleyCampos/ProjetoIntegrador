@@ -19,14 +19,36 @@ import java.util.ArrayList;
 public class Estoque  {
 
     EstoqueDAO daoest= new EstoqueDAO();
-    private int codProd=1;
-    private String descricao;
-    private double preco;
-    private int qtdMax;
-    private int qtdMin;
-    private int idModelo;
+    private static int codProd=1;
+    private static String descricao;
+    private static double preco;
+    private static int qtdMax;
+    private static int qtdMin;
+    private static  int idModelo;
 
     public Estoque() {
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + this.codProd;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Estoque other = (Estoque) obj;
+        if (this.codProd != other.codProd) {
+            return false;
+        }
+        return true;
     }
 
     public Estoque(String descricao, double preco, int qtdMax, int qtdMin, int idModelo) {

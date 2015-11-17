@@ -13,6 +13,6 @@ import java.util.List;
  * @author rafael Mello
  */
 public class Dados {
-    public static List<Estoque> ListaEstoque = new ArrayList< >();
+    public static List<Estoque> ListaEstoque = new ArrayList<>();
 
 }

@@ -381,14 +381,12 @@ public class CadProduto extends javax.swing.JFrame {
  
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        int LinhaTabela= tbExibe.getSelectedRow();
-       idprod= (int) tbExibe.getValueAt(LinhaTabela, 0);
-       est.setCodProd(idprod);
         int saida = JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        if (JOptionPane.YES_OPTION == saida && idprod!=null ) {
-         dao.delete(est);
+        if (JOptionPane.YES_OPTION == saida&& idprod!=null ) {
+          est.setCodProd(idprod);
+          dao.delete(est);
         }
 
     }//GEN-LAST:event_btnDeleteActionPerformed

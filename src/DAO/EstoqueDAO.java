@@ -33,16 +33,9 @@ public class EstoqueDAO {
 
     int codProduto;
     ConectaBanco conecta = new ConectaBanco();
-PreparedStatement stm = null;
-public List<Estoque> getLista(){
-    return Dados.ListaEstoque;
-    
-}
-
+    PreparedStatement stm = null;
 
     public Estoque salvarDados(Estoque obj) throws Exception {
-
-      
 
         try {
             String sql = "insert into PRODUTO(DESCRICAO_PRODUTO,ID_MODELO,PRECO_UNITARIO,QTD_MINIMO,QTD_MAXIMO) values(?,?,?,?,?)";
@@ -83,37 +76,30 @@ public List<Estoque> getLista(){
         return consultarEstoque(pesq);
 
     }
-    
-    public boolean delete(Estoque del){
-        
-//        try {
-                
-            Dados.ListaEstoque.remove(del);
-            
-            
-//                   String sql="delete produto  where ID_PRODUTO=? "+del.getCodProd() ;
-//                   stm = conecta.conn.prepareStatement(sql);
-//                   
-////                   stm.setString(1,del.getDescricao());
-//                   stm.setInt(1, del.getCodProd());
-//                   stm.executeUpdate();
-//                    JOptionPane.showMessageDialog(null, "produto excluido com sucesso ");
-//                                
-//                }
-//             catch (SQLException ex) {
-//                System.out.println("Erro ao obter valores SQL" + ex);
-//            }
-//        catch (NullPointerException ex){
-//            System.out.println("Valores não inicializados");
-//        }
-      return  true;
-    }
-    
-    public Estoque atualizaDados(Estoque at){
-          
-           conecta.conexao();
+
+    public void delete(Estoque del) {
+        conecta.conexao();
         try {
-            String sql=("update produto set DESCRICAO_PRODUTO=?  where ID_PRODUTO=? ");
+            String sql = "delete from produto where ID_PRODUTO = ? ";
+            stm = conecta.conn.prepareStatement(sql);
+            stm.setInt(1, del.getCodProd());
+            stm.execute();
+            JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
+
+        } catch (SQLException ex) {
+            System.out.println("Erro ao obter valores SQL" + ex.getMessage());
+        }
+        catch (NullPointerException ex){
+            System.out.println("Dados não inicializados");
+            
+        }
+    }
+
+    public Estoque atualizaDados(Estoque at) {
+
+        conecta.conexao();
+        try {
+            String sql = ("update produto set DESCRICAO_PRODUTO=?  where ID_PRODUTO=? ");
             stm = conecta.conn.prepareStatement(sql);
             stm.setString(1, at.getDescricao());
             stm.setInt(2, at.getCodProd());
@@ -121,18 +107,14 @@ public List<Estoque> getLista(){
             JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso !!");
         } catch (SQLException ex) {
             System.out.println("não foi possivel atualização ");
-        }
-        catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.out.println("dao Atualizar não inicializado");
-            
+
         }
         return at;
     }
 
     //associa o nome do modelo ao codigo do produto
-   
-
-    
 }
 
 /**

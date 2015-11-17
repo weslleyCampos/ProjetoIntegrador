@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 //import javax.swing.JFrame;
@@ -347,6 +348,7 @@ public class EntradaProduto extends javax.swing.JFrame {
             verificarData = false;
         }
 
+        //Realiza validações dos campos que precisam estar preenchidos
         if (txtIDProduto.getText().trim().equals("")) {
             lblNotificacao.setForeground(Color.red);
             lblNotificacao.setText("Para adicionar no carrinho, por favor selecione um ou mais produtos!");
@@ -380,6 +382,7 @@ public class EntradaProduto extends javax.swing.JFrame {
                 lblNotificacao.setText("A quantidade informada irá ultrapassar a máxima desejada para esse produto!");
             }
             entrarEstoque.add(e);
+            
             lblNotificacao.setForeground(Color.blue);
             lblNotificacao.setText("Produto adicionado na lista de entrada!");
 //            adicionarCarrinho(entrarEstoque);
@@ -437,11 +440,26 @@ public class EntradaProduto extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
 
+        int confirmar = JOptionPane.showConfirmDialog(null, "Deseja cancelar entrada no estoque dos produtos?", "sim ou nao", JOptionPane.YES_NO_OPTION);
+        if (confirmar == JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(null, "Essa tela será fechada.");
+            setVisible(false);
+        } else if (confirmar == JOptionPane.NO_OPTION) {
+        }
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+//    private void montarTabela(ArrayList dados) {
+//
+//        DefaultTableModel tableModel = new DefaultTableModel();
+//        tableModel.setColumnIdentifiers(new String[]{"Descrição do Produto", "Quantidade inserida"});
+//
+//        tableModel.addRow(new Object[]{e.getDescricaoProduto(), e.getQtdItem()});
+//
+//        jTableItensEntrada.setModel(tableModel);
+//    }
 
     //Função para adicionar todos os produtos no carrinho
     public void adicionarCarrinho(ArrayList dados) {
-        Entrada e = new Entrada();
         // Nome das colunas que serão mostradas na tabela
         String[] colunas = new String[]{"Descricao Produto", "Quantidade"};
         // Adiciona no ArrayList um produto novo.

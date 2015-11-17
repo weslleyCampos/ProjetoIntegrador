@@ -10,10 +10,7 @@ import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import sqlconexao.ConectaBanco;
-import utilitarios.Saida;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import utilitarios.Vendas;
 
 /**
  *
@@ -29,7 +26,7 @@ public class VendasDAO {
         conecta.conexao();
     }
 
-    public void confirmaVenda(Saida venda) {
+    public void confirmaVenda(Vendas venda) {
 
         buscarCodigoVendedor(venda.getIdVendedor());
 
@@ -41,7 +38,7 @@ public class VendasDAO {
             //PreparedStatement pst = conecta.conn.prepareStatement("insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)");
             pst.setInt(1, codigoVendedor);
             pst.setString(2, venda.getDescricaoProduto());
-            pst.setDate(3, formataData(venda.getDataSaida()));
+            pst.setString(3, venda.getDataSaida());
             pst.setDouble(4, venda.getPrecoTotal());
             pst.setInt(5, venda.getQtdItem());
             pst.executeUpdate();
@@ -83,27 +80,6 @@ public class VendasDAO {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar os vendedores!\n" + ex.getMessage());
         }
 
-    }
-
-    /**
-     * Converte data para joga no banco
-     *
-     * @param data
-     * @return
-     */
-    public static java.sql.Date formataData(String data) {
-        if (data == null || data.equals("")) {
-            return null;
-        }
-
-        java.sql.Date date = null;
-        try {
-            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-        return date;
     }
 
 }

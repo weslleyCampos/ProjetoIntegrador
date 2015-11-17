@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  *
  * @author Giovane
  */
-public class Saida {
+public class Vendas {
 
     private int idSaida;
     private String idVendedor;
@@ -43,7 +43,7 @@ public class Saida {
     }
 
     public String getDataSaida() {
-        return  formataData(dataSaida).toString();
+        return  dataSaida;
     }
 
     public void setDataSaida(String dataSaida) {

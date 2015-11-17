@@ -6,19 +6,18 @@
 package utilitarios;
 
 import java.util.ArrayList;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author Weslley.Campos
- * Classe para criação de tabela de todo o Projeto
+ * @author Weslley.Campos Classe para criação de tabela de todo o Projeto
  */
 public class ModeloTabela extends AbstractTableModel {
 
     private ArrayList linhas = null;
     private String[] colunas = null;
-    
-    
+
     public ModeloTabela(ArrayList lin, String[] col) {
         setLinhas(lin);
         setColunas(col);
@@ -44,24 +43,24 @@ public class ModeloTabela extends AbstractTableModel {
     public int getColumnCount() {
         return colunas.length;
     }
-    
+
     @Override
-    public int getRowCount(){
+    public int getRowCount() {
         return linhas.size();
     }
-    
+
     @Override
-    public String getColumnName(int numCol){
+    public String getColumnName(int numCol) {
         return colunas[numCol];
     }
-    
+
     @Override
-    public Object getValueAt(int numLin, int numCol){
-        Object[] linha = (Object[])getLinhas().get(numLin);
+    public Object getValueAt(int numLin, int numCol) {
+        Object[] linha = (Object[]) getLinhas().get(numLin);
         return linha[numCol];
     }
-    
-    public void removeProduto(int indiceLinha){
+
+    public void removeProduto(int indiceLinha) {
         // Remove Linha
         linhas.remove(indiceLinha);
         // Notifica mudança

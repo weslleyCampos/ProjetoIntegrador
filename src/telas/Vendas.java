@@ -17,7 +17,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import sqlconexao.ConectaBanco;
 import utilitarios.ModeloTabela;
-import utilitarios.Saida;
 
 /**
  *
@@ -32,7 +31,7 @@ public class Vendas extends javax.swing.JFrame {
     VendasDAO vendasDAO = new VendasDAO();
     int idSaida = 0;
     ConectaBanco conecta = new ConectaBanco();
-    
+
     /**
      * Creates new form Vendas
      */
@@ -91,12 +90,6 @@ public class Vendas extends javax.swing.JFrame {
         jText_CodProduto.setText(" ");
 
         jLabel2.setText("Descrição");
-
-        jText_Descricao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jText_DescricaoActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Quantidade");
 
@@ -296,16 +289,22 @@ public class Vendas extends javax.swing.JFrame {
         // Adiciona os valores preenchidos dos campos para a tabela carrinho.
         // Todos os campos devem ser preenchidos
         if (!jText_Quantidade.getText().trim().equals("")) {
-            adicionarCarrinho(dadosCarrinho);
-            atualizaPrecoTotal();
+            // Valores para comparar a disponibilidade de estoque
+            int qtd = Integer.parseInt(jText_Quantidade.getText());
+            int qtdDisp = Integer.parseInt(jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 3).toString());
+            // Testa se tem quantidade disponível
+            if (qtd <= qtdDisp) {
+                adicionarCarrinho(dadosCarrinho);
+                // Atualiza a quantidade disponivel na tabela pesquisa
+                atualizaQtdDisp(jTable_Pesquisa, jTable_Pesquisa.getSelectedRow(), 3);
+                atualizaPrecoTotal();
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Quantidade não disponível!");
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane, "Preencha todos os campos!");
         }
     }//GEN-LAST:event_jButton_AddCarrinhoActionPerformed
-
-    private void jText_DescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jText_DescricaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jText_DescricaoActionPerformed
 
     private void jButton_SairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SairActionPerformed
         this.dispose();
@@ -345,14 +344,15 @@ public class Vendas extends javax.swing.JFrame {
                 String descricao = jTable_Carrinho.getValueAt(i, 1).toString(); //Pega o modelo
                 double preco = (Double) jTable_Carrinho.getValueAt(i, 3); //Pega o modelo
 
-                Saida s = new Saida();
+                utilitarios.Vendas s = new utilitarios.Vendas();
                 s.setIdVendedor(vendedor);
                 s.setDataSaida(dataAtual);
                 s.setQtdItem(qtdItem);
                 s.setDescricaoProduto(descricao);
                 s.setPrecoTotal(preco);
-                
+
                 vendasDAO.confirmaVenda(s);
+
             }
 
             // limpa o carrinho
@@ -361,12 +361,27 @@ public class Vendas extends javax.swing.JFrame {
             }
             //Limpa o Valor Total
             jText_ValorTotal.setText(null);
-            
+
             JOptionPane.showMessageDialog(rootPane, "Venda Confirmada!");
         } else {
             JOptionPane.showMessageDialog(rootPane, "Carrinho Vazio!");
         }
     }//GEN-LAST:event_jButton_ConfirmVendaActionPerformed
+
+    /**
+     *
+     * @param j
+     * @param row
+     * @param col
+     */
+    public void atualizaQtdDisp(JTable j, int row, int col) {
+        String[] colunas = new String[]{"Código", "Descricao Produto", "Preço Unitario", "Qtd Atual de Estoque"};
+        ArrayList dados = new ArrayList();
+        dados.add(new Object[]{j.getValueAt(row, 0), j.getValueAt(row, 1), j.getValueAt(row, 2), j.getValueAt(row, 3)});
+        j.setValueAt(500,row, 3);        
+        ModeloTabela modelo = new ModeloTabela(dados, colunas);
+        setModel(modelo, j);
+    }
 
     /**
      *
@@ -386,6 +401,10 @@ public class Vendas extends javax.swing.JFrame {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
@@ -410,7 +429,7 @@ public class Vendas extends javax.swing.JFrame {
         }
     }
 
-     /**
+    /**
      * Preenche uma tabela
      *
      * @param SQL String com comando em SQL
@@ -439,7 +458,7 @@ public class Vendas extends javax.swing.JFrame {
         setModel(modelo, tabela);
 
     }
-    
+
     /**
      *
      * @param dados
@@ -478,7 +497,7 @@ public class Vendas extends javax.swing.JFrame {
         tabela.setAutoResizeMode(tabela.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-    
+
     /**
      * @param args the command line arguments
      */

@@ -12,19 +12,17 @@ import java.awt.Color;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 //import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.DefaultTableModel;
 //import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import sqlconexao.ConectaBanco;
-import utilitarios.Entrada;
+import classes.Entrada;
 import utilitarios.ModeloTabela;
 
 /**

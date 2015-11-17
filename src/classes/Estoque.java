@@ -1,12 +1,6 @@
-package utilitarios;
-import java.io.Serializable;
-import java.util.Objects;
-import javax.swing.JOptionPane;
-import telas.CadProduto;
+package classes;
 //import telas.FrameLog;
 import DAO.EstoqueDAO;
-import java.util.List;
-import java.util.ArrayList;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -19,7 +13,7 @@ import java.util.ArrayList;
 public class Estoque  {
 
     EstoqueDAO daoest= new EstoqueDAO();
-    private static int codProd=1;
+    private static int codProd;
     private static String descricao;
     private static double preco;
     private static int qtdMax;

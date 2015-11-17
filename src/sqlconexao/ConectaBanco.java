@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
  */
 public class ConectaBanco {
 
-    public Statement stm;
+     public Statement stm;
     public ResultSet rs;
     private String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private String caminho = "jdbc:sqlserver://localhost:1433;databaseName=PROJETOINTEGRADOR";

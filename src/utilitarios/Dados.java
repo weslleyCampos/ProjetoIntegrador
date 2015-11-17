@@ -5,6 +5,7 @@
  */
 package utilitarios;
 
+import classes.Estoque;
 import java.util.ArrayList;
 import java.util.List;
 

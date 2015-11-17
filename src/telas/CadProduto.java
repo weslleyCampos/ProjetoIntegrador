@@ -29,7 +29,7 @@ import javax.swing.Action;
 import javax.swing.ListSelectionModel;
 import javax.swing.text.MaskFormatter;
 import sqlconexao.ConectaBanco;
-import utilitarios.Estoque;
+import classes.Estoque;
 
 /**
  *
@@ -40,7 +40,7 @@ public class CadProduto extends javax.swing.JFrame {
     EstoqueDAO dao = new EstoqueDAO();
     Estoque est = new Estoque();
     ConectaBanco conectar = new ConectaBanco();
-    
+
     public Integer idmod;
     public Integer idprod;
 
@@ -51,7 +51,7 @@ public class CadProduto extends javax.swing.JFrame {
         initComponents();
         conectar.conexao();
 
-        //faz o get/ Select da tabela produtos para o cbBox
+        //faz o get/ Select da tabela produtos para o cbBox em ordem especificada
         conectar.executaSQL("select * from MODELO_PRODUTO order by Id_modelo");
 
         CbModelo.removeAllItems();
@@ -77,7 +77,7 @@ public class CadProduto extends javax.swing.JFrame {
         btnDelete.setVisible(false);
 
         preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
-      
+
     }
 
     /**
@@ -378,26 +378,26 @@ public class CadProduto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
- 
+
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         int saida = JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        if (JOptionPane.YES_OPTION == saida&& idprod!=null ) {
-          est.setCodProd(idprod);
-          dao.delete(est);
+        if (JOptionPane.YES_OPTION == saida && idprod != null) {
+            est.setCodProd(idprod);
+            dao.delete(est);
         }
-
+        preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tbExibeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbExibeMouseClicked
-    int indiceLinha = tbExibe.getSelectedRow();
-    cbCodMod.setSelectedIndex((int) tbExibe.getValueAt(indiceLinha, 1));
-    txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
-    idprod= (int) tbExibe.getValueAt(indiceLinha, 0);
-    est.setCodProd(idprod);
-    
+        int indiceLinha = tbExibe.getSelectedRow();
+        cbCodMod.setSelectedIndex((int) tbExibe.getValueAt(indiceLinha, 1));
+        txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
+        idprod = (int) tbExibe.getValueAt(indiceLinha, 0);
+        est.setCodProd(idprod);
+
 //    est.setDescricao(txtDescricao.getText());
 //    dao.consultarIdProduto(est);
     }//GEN-LAST:event_tbExibeMouseClicked
@@ -431,13 +431,12 @@ public class CadProduto extends javax.swing.JFrame {
             double preco = (Double.parseDouble(txtPreco.getText()));
             int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
             int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
-            int modPro= (int) (cbCodMod.getSelectedItem());
-            
-            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo,modPro );
-            est.salvarestoque(e);
-//          
+            int modPro = (int) (cbCodMod.getSelectedItem());
 
+            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo, modPro);
+            est.salvarestoque(e);
         }
+        preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
 
 
     }//GEN-LAST:event_btnSlavarActionPerformed
@@ -455,33 +454,33 @@ public class CadProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_cbCodModActionPerformed
 
     private void CbModeloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CbModeloMouseClicked
-        
+
     }//GEN-LAST:event_CbModeloMouseClicked
 
     private void btnAtualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizaActionPerformed
         // TODO add your handling code here:
-       
-          
+
         est.setDescricao(txtDescricao.getText());
+        est.setIdModelo(cbCodMod.getSelectedIndex());
         est.atualizaDados(est);
-      
-        
+
+        preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
     }//GEN-LAST:event_btnAtualizaActionPerformed
 
     private void tbExibeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbExibeKeyReleased
         // TODO add your handling code here:
         int indiceLinha = tbExibe.getSelectedRow();
-    cbCodMod.setSelectedIndex((int) tbExibe.getValueAt(indiceLinha, 1));
-    txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
-    txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
-
+        cbCodMod.setSelectedIndex((int) tbExibe.getValueAt(indiceLinha, 1));
+        txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
+        txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
+        est.setIdModelo(CbModelo.getSelectedIndex());
     }//GEN-LAST:event_tbExibeKeyReleased
 
     public void preencheTabela(String SQL) {
         ArrayList dados = new ArrayList();
 
         String[] Colunas = new String[]{"ID", "ID MODELO", "             DESCRIÇÃO"
-                + "", "QUANTIDADE EM ESTOQUE"};
+            + "", "QUANTIDADE EM ESTOQUE"};
         conectar.executaSQL(SQL);
 
         try {

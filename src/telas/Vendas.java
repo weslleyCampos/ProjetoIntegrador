@@ -344,7 +344,7 @@ public class Vendas extends javax.swing.JFrame {
                 String descricao = jTable_Carrinho.getValueAt(i, 1).toString(); //Pega o modelo
                 double preco = (Double) jTable_Carrinho.getValueAt(i, 3); //Pega o modelo
 
-                utilitarios.Vendas s = new utilitarios.Vendas();
+                classes.Vendas s = new classes.Vendas();
                 s.setIdVendedor(vendedor);
                 s.setDataSaida(dataAtual);
                 s.setQtdItem(qtdItem);

@@ -5,25 +5,12 @@
  */
 package DAO;
 
-import java.sql.*;
 import utilitarios.Dados;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import utilitarios.Estoque;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import classes.Estoque;
 import javax.swing.JOptionPane;
-import javax.swing.plaf.RootPaneUI;
 import sqlconexao.ConectaBanco;
-import telas.CadProduto;
 
 /**
  *
@@ -34,9 +21,9 @@ public class EstoqueDAO {
     int codProduto;
     ConectaBanco conecta = new ConectaBanco();
     PreparedStatement stm = null;
-
+Dados lisDados= new Dados();
     public Estoque salvarDados(Estoque obj) throws Exception {
-
+//        inseerção de dados a partir do objetos estoque passado por parametro na classe
         try {
             String sql = "insert into PRODUTO(DESCRICAO_PRODUTO,ID_MODELO,PRECO_UNITARIO,QTD_MINIMO,QTD_MAXIMO) values(?,?,?,?,?)";
             conecta.conexao();
@@ -63,35 +50,37 @@ public class EstoqueDAO {
         return obj;
     }
 
-    public Estoque consultarEstoque(Estoque pesq) {
+    public boolean consultarEstoque(Estoque pesq) {
 
         PreparedStatement stm = null;
 
         String SQL = " update to Usuario (codProd, modelo,fornecedor, descricao, preco,qtdMax,qtdMin)" + " values (?,?,?)";
-
+        pesq.getCodProd();
         try {
 
         } catch (Exception e) {
         }
-        return consultarEstoque(pesq);
+        return true;
 
     }
 
     public void delete(Estoque del) {
         conecta.conexao();
         try {
+//            executa um comando sql de DELETE da tabela produto onde o id_produto for igual ao retorno 
+//                    de parametros via obj
             String sql = "delete from produto where ID_PRODUTO = ? ";
             stm = conecta.conn.prepareStatement(sql);
             stm.setInt(1, del.getCodProd());
+            
             stm.execute();
             JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
 
         } catch (SQLException ex) {
             System.out.println("Erro ao obter valores SQL" + ex.getMessage());
-        }
-        catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             System.out.println("Dados não inicializados");
-            
+
         }
     }
 
@@ -99,12 +88,17 @@ public class EstoqueDAO {
 
         conecta.conexao();
         try {
-            String sql = ("update produto set DESCRICAO_PRODUTO=?  where ID_PRODUTO=? ");
+//          string sql que recebe como parametros os oos valores de objeto estoque e insere na tabela produtos
+//                  onde id_produtos for igual ao retorni
+            String sql = ("update produto set DESCRICAO_PRODUTO=?, ID_MODELO=? where ID_PRODUTO=? ");
             stm = conecta.conn.prepareStatement(sql);
             stm.setString(1, at.getDescricao());
-            stm.setInt(2, at.getCodProd());
+            stm.setInt(2, at.getIdModelo());
+            stm.setInt(3, at.getCodProd());
+            
             stm.execute();
             JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso !!");
+            
         } catch (SQLException ex) {
             System.out.println("não foi possivel atualização ");
         } catch (NullPointerException ex) {

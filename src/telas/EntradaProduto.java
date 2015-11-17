@@ -33,7 +33,7 @@ import utilitarios.ModeloTabela;
  */
 public class EntradaProduto extends javax.swing.JFrame {
 
-//Declara conexão com banco de dados
+    //Declara conexão com banco de dados
     ConectaBanco conecta = new ConectaBanco();
 
     //Declarando ArrayList 
@@ -448,15 +448,6 @@ public class EntradaProduto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-//    private void montarTabela(ArrayList dados) {
-//
-//        DefaultTableModel tableModel = new DefaultTableModel();
-//        tableModel.setColumnIdentifiers(new String[]{"Descrição do Produto", "Quantidade inserida"});
-//
-//        tableModel.addRow(new Object[]{e.getDescricaoProduto(), e.getQtdItem()});
-//
-//        jTableItensEntrada.setModel(tableModel);
-//    }
 
     //Função para adicionar todos os produtos no carrinho
     public void adicionarCarrinho(ArrayList dados) {

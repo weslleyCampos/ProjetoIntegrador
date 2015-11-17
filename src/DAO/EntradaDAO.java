@@ -85,7 +85,7 @@ public class EntradaDAO {
      */
     public int preencherIdEntrada(int idEntrada) {
         conecta.conexao();
-        conecta.executaSQL("select max(id_entrada + 1)[max] from movimentacao_entrada");
+        conecta.executaSQL("select max(id_entrada + 1) as max from movimentacao_entrada");
         try {
             conecta.rs.first();
             idEntrada = conecta.rs.getInt("max");

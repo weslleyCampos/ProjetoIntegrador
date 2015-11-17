@@ -50,6 +50,10 @@ public class Estoque  {
         daoest.atualizaDados((Estoque) refresh);
     }
     
+    public void deletProd(Object d){
+        
+        daoest.delete((Estoque) d);
+    }
    
 
     public Integer getCodProd() {

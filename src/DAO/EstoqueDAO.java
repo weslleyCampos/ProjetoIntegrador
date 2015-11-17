@@ -33,10 +33,16 @@ public class EstoqueDAO {
 
     int codProduto;
     ConectaBanco conecta = new ConectaBanco();
+PreparedStatement stm = null;
+public List<Estoque> getLista(){
+    return Dados.ListaEstoque;
+    
+}
+
 
     public Estoque salvarDados(Estoque obj) throws Exception {
 
-        PreparedStatement stm = null;
+      
 
         try {
             String sql = "insert into PRODUTO(DESCRICAO_PRODUTO,ID_MODELO,PRECO_UNITARIO,QTD_MINIMO,QTD_MAXIMO) values(?,?,?,?,?)";
@@ -78,28 +84,39 @@ public class EstoqueDAO {
 
     }
     
-    public void delete(Estoque del){
+    public boolean delete(Estoque del){
         
-        try {
-                if (conecta.rs.getInt("QTD_ESTOQUE") ==0) {
-                    conecta.executaSQL("delete from produto where id_produto= ?'" );
-                    
-                    JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Produto não pode ser excluido, necessario zerar estoque!");
-                }
-            } catch (SQLException ex) {
-                System.out.println("Erro ao obter valores SQL" + ex);
-            }
+//        try {
+                
+            Dados.ListaEstoque.remove(del);
+            
+            
+//                   String sql="delete produto  where ID_PRODUTO=? "+del.getCodProd() ;
+//                   stm = conecta.conn.prepareStatement(sql);
+//                   
+////                   stm.setString(1,del.getDescricao());
+//                   stm.setInt(1, del.getCodProd());
+//                   stm.executeUpdate();
+//                    JOptionPane.showMessageDialog(null, "produto excluido com sucesso ");
+//                                
+//                }
+//             catch (SQLException ex) {
+//                System.out.println("Erro ao obter valores SQL" + ex);
+//            }
+//        catch (NullPointerException ex){
+//            System.out.println("Valores não inicializados");
+//        }
+      return  true;
     }
     
     public Estoque atualizaDados(Estoque at){
-          PreparedStatement stm = null;
+          
            conecta.conexao();
         try {
-            String sql=("update produto set DESCRICAO_PRODUTO=? ");
+            String sql=("update produto set DESCRICAO_PRODUTO=?  where ID_PRODUTO=? ");
             stm = conecta.conn.prepareStatement(sql);
             stm.setString(1, at.getDescricao());
+            stm.setInt(2, at.getCodProd());
             stm.execute();
             JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso !!");
         } catch (SQLException ex) {

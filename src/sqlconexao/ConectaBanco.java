@@ -39,15 +39,12 @@ public class ConectaBanco {
     private String senha1 = "1234";
 
     public void conexao() {
-        try {
+         try {
             System.setProperty("jdbc.Drivers", driver);
 
             //conexão mySQL
-            //conn = DriverManager.getConnection(caminho1, usuario1, senha1);
-            
-            //conexão SQL server
-                conn = DriverManager.getConnection(caminho, usuario, senha);
-                
+            conn = DriverManager.getConnection(caminho1, usuario1, senha1);
+
             //JOptionPane.showMessageDialog(null, "Conectado");
         } catch (SQLException ex) {
             try {
@@ -65,7 +62,7 @@ public class ConectaBanco {
             stm = conn.createStatement(rs.TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);
             rs = stm.executeQuery(sql);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro de Executa SQL!\n" + ex.getMessage());
+            //JOptionPane.showMessageDialog(null, "Erro de Executa SQL!\n" + ex.getMessage());
         }
     }
 

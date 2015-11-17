@@ -34,15 +34,16 @@ public class EntradaDAO {
     public void salvarEntrada(ArrayList<Entrada> colecao) {
 
         String sqlInsere = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
-        String sqlUpdate = "update produto set (QTD_ESTOQUE)=? where ID_PRODUTO=?";
+        String sqlUpdate = "update produto set QTD_ESTOQUE=? where ID_PRODUTO=?";
         conecta.conexao();
+        
         try {
             pst = conecta.conn.prepareStatement(sqlInsere);
             pst1 = conecta.conn.prepareStatement(sqlUpdate);
             for (Entrada e : colecao) {
                 pst.setInt(1, e.getIdEntrada());
                 pst.setInt(2, e.getIdProduto());
-                pst.setInt(3, 1);
+                pst.setInt(3, codigoVendedor = buscarCodigoVendedor(e.getIdVendedor()));
                 pst.setString(4, e.getDataChegada());
                 pst.setInt(5, e.getQtdItem());
                 pst.executeUpdate();
@@ -52,43 +53,19 @@ public class EntradaDAO {
             }
             pst.close();
             conecta.conn.close();
+            JOptionPane.showMessageDialog(null, "Produto(s) adicionado(s) no estoque com sucesso!");
         } catch (SQLException ex) {
             Logger.getLogger(EntradaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-//    public Entrada salvarEntrada(Entrada salvar) {
-//
-//        buscarCodigoVendedor(salvar.getIdVendedor());
-//
-//        try {
-//            String sql = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
-//            conecta.conexao();
-//            pst = conecta.conn.prepareStatement(sql);
-//            //PreparedStatement pst = conecta.conn.prepareStatement("insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)");
-//            pst.setInt(1, salvar.getIdEntrada());
-//            pst.setInt(2, salvar.getIdProduto());
-//            pst.setInt(3, codigoVendedor);
-//            pst.setString(4, salvar.getDataChegada());
-//            pst.setInt(5, salvar.getQtdItem());
-//            pst.executeUpdate();
-//            pst.close();
-//            conecta.conn.close();
-//
-////            JOptionPane.showMessageDialog(null, "Produto adicionado no carrinho");
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Deu ruim" + ex);
-//        }
-//        return salvar;
-//    }
-
     /*
      * Para encontrar o ID_Vendedor e realizar o vinculo
      * essa função realiza a busca de acordo com o nome marcado na ComboBox
      * retornando o ID da tabela de Vendedor
      */
-    public void buscarCodigoVendedor(String nome) {
+    public int buscarCodigoVendedor(String nome) {
         conecta.conexao();
         conecta.executaSQL("select * from vendedor where nome_vendedor = '" + nome + "'");
         try {
@@ -98,6 +75,8 @@ public class EntradaDAO {
             JOptionPane.showMessageDialog(null, "Falha ao buscar codigo do vendedor.\n" + ex);
         }
         conecta.desconecta();
+        return codigoVendedor;
+        
     }
 
     /**

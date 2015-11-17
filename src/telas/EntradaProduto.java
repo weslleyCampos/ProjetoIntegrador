@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 //import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
@@ -365,10 +366,9 @@ public class EntradaProduto extends javax.swing.JFrame {
             int qtdItem = Integer.parseInt(txtQtd.getText());
             String descricaoProduto = txtDescricao.getText();
             int somaQtd = entradaDAO.calcularQuantidadeEstoque(idProduto, qtdItem);
-            
 
             //Declarando classe de entrada de estoque
-            Entrada e = new Entrada(idEntrada, idProduto, idVendedor, dataChegada, qtdItem, descricaoProduto,somaQtd);
+            Entrada e = new Entrada(idEntrada, idProduto, idVendedor, dataChegada, qtdItem, descricaoProduto, somaQtd);
 
             //RETIRAR
             System.out.println(e);
@@ -380,6 +380,8 @@ public class EntradaProduto extends javax.swing.JFrame {
                 lblNotificacao.setText("A quantidade informada irá ultrapassar a máxima desejada para esse produto!");
             }
             entrarEstoque.add(e);
+            lblNotificacao.setForeground(Color.blue);
+            lblNotificacao.setText("Produto adicionado na lista de entrada!");
 //            adicionarCarrinho(entrarEstoque);
         }
     }//GEN-LAST:event_btnAdicionarEntradaActionPerformed
@@ -422,6 +424,7 @@ public class EntradaProduto extends javax.swing.JFrame {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
         entradaDAO.salvarEntrada(entrarEstoque);
+        setVisible(false);
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
@@ -438,6 +441,7 @@ public class EntradaProduto extends javax.swing.JFrame {
 
     //Função para adicionar todos os produtos no carrinho
     public void adicionarCarrinho(ArrayList dados) {
+        Entrada e = new Entrada();
         // Nome das colunas que serão mostradas na tabela
         String[] colunas = new String[]{"Descricao Produto", "Quantidade"};
         // Adiciona no ArrayList um produto novo.

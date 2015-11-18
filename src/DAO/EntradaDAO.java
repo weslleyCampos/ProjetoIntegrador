@@ -16,30 +16,51 @@ import classes.Entrada;
 
 /**
  *
- * @author Weslley
+ * @author Weslley.Campos
  */
 public class EntradaDAO {
 
+    //declarando conexão com banco de dados
     ConectaBanco conecta = new ConectaBanco();
 
+    //iniciando PreparedStatement como Nulo
     PreparedStatement pst = null;
     PreparedStatement pst1 = null;
 
+    //variavel global, pois a mesma será utlizada em (salvarEntrada, buscarCodigoVendedor)
     int codigoVendedor;
 
     public EntradaDAO() {
 
     }
 
+    /**
+     * Esse metodo é utilizando para incluir as informações do Arraylist do tipo
+     * Entrada para o banco de dados, foi dado nome de colecao. Na linha 54 é
+     * foi utilizada um auxilio do metodo buscarCodigoVendedor para que fosse
+     * realizado uma busca na tabela Vendedor do BD e retornar o ID do vendedor
+     *
+     */
     public void salvarEntrada(ArrayList<Entrada> colecao) {
 
-        String sqlInsere = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
+        /**
+         *String sqlInsert: guardar o script de comando do SQL inserir
+         * String sqlUpdate: guardar o script de comando do SQL atualizar, 
+         */
+        String sqlInsert = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
         String sqlUpdate = "update produto set QTD_ESTOQUE=? where ID_PRODUTO=?";
         conecta.conexao();
-        
+
         try {
-            pst = conecta.conn.prepareStatement(sqlInsere);
+            /**
+             * prepareStatement receberá como parametro a String com comando SQL
+             */
+            pst = conecta.conn.prepareStatement(sqlInsert);
             pst1 = conecta.conn.prepareStatement(sqlUpdate);
+            /**
+             * Percorrendo ArrayList do tipo Entrada, para inserir as informações
+             * na tabela do BD movimentação_entrada
+             */
             for (Entrada e : colecao) {
                 pst.setInt(1, e.getIdEntrada());
                 pst.setInt(2, e.getIdProduto());
@@ -47,9 +68,12 @@ public class EntradaDAO {
                 pst.setString(4, e.getDataChegada());
                 pst.setInt(5, e.getQtdItem());
                 pst.executeUpdate();
+                /**
+                 * Atualizando no BD a quantidade atual do estoque dos produtos
+                 */
                 pst1.setInt(1, e.getSomaQtd());
                 pst1.setInt(2, e.getIdProduto());
-                pst1.executeUpdate();                
+                pst1.executeUpdate();
             }
             pst.close();
             conecta.conn.close();
@@ -76,7 +100,7 @@ public class EntradaDAO {
         }
         conecta.desconecta();
         return codigoVendedor;
-        
+
     }
 
     /**

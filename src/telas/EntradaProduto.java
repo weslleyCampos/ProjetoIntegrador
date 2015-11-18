@@ -45,11 +45,20 @@ public class EntradaProduto extends javax.swing.JFrame {
 
     public EntradaProduto() {
         initComponents();
-        preencherCombo();
+
+        //função iniciada para popular combobox vendedores
+        preencherComboVendedores();
+
+        /**
+         * guardando resultado na variavel, após metodo buscar o ultimo numero
+         * acrescentando + 1, dessa forma não será adicionado uma nova entrada
+         * com IDEntrada já registrada
+         */
         idEntrada = entradaDAO.preencherIdEntrada(idEntrada);
         txtIDEntrada.setText(Integer.toString(idEntrada));
+
         conecta.conexao();
-        //Marcará utilizada na data de chegada do produto
+        //Mascara utilizada na data de chegada do produto
         try {
             MaskFormatter form = new MaskFormatter("##/##/####");
             txtDataChegada.setFormatterFactory(new DefaultFormatterFactory(form));
@@ -257,9 +266,6 @@ public class EntradaProduto extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -281,11 +287,6 @@ public class EntradaProduto extends javax.swing.JFrame {
                                 .addComponent(btnBuscar)
                                 .addGap(101, 101, 101))))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(jLabel3)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -295,7 +296,13 @@ public class EntradaProduto extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtIDEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtIDEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -358,7 +365,7 @@ public class EntradaProduto extends javax.swing.JFrame {
         } else {
             lblNotificacao.setText("");
 
-            //Guardando informaçoes dos campos 
+            //Guardando informaçoes dos campos da tela de EntradaProduto
             int idEntrada = Integer.parseInt(txtIDEntrada.getText());
             int idProduto = Integer.parseInt(txtIDProduto.getText());
             String idVendedor = (String) cmbVendedor.getSelectedItem();
@@ -370,20 +377,22 @@ public class EntradaProduto extends javax.swing.JFrame {
             //Declarando classe de entrada de estoque
             Entrada e = new Entrada(idEntrada, idProduto, idVendedor, dataChegada, qtdItem, descricaoProduto, somaQtd);
 
-            //RETIRAR
-            System.out.println(e);
-            System.out.println(somaQtd);
-
+            /**
+             * Rotina para apresentar em "lblNotificacao" se a quantidade
+             * ultrapassará a quantidade maxima informada. Observaçaõ: Essa
+             * rotina não bloqueia a entrada do mesmo
+             */
             validar = entradaDAO.validaQuantidadeMaxima(idProduto, qtdItem);
             if (validar == true) {
                 lblNotificacao.setForeground(Color.red);
                 lblNotificacao.setText("A quantidade informada irá ultrapassar a máxima desejada para esse produto!");
             }
             entrarEstoque.add(e);
-            
+
             lblNotificacao.setForeground(Color.blue);
             lblNotificacao.setText("Produto adicionado na lista de entrada!");
-//            adicionarCarrinho(entrarEstoque);
+            
+            adicionarCarrinho(entrarEstoque);
         }
     }//GEN-LAST:event_btnAdicionarEntradaActionPerformed
 
@@ -446,15 +455,18 @@ public class EntradaProduto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-
     //Função para adicionar todos os produtos no carrinho
     public void adicionarCarrinho(ArrayList dados) {
+        
         // Nome das colunas que serão mostradas na tabela
         String[] colunas = new String[]{"Descricao Produto", "Quantidade"};
+        
         // Adiciona no ArrayList um produto novo.
         dados.add(new String[]{txtDescricao.getText(), txtQtd.getText()});
+        
         // Cria o modelo de tabela
         ModeloTabela carrinho = new ModeloTabela(dados, colunas);
+        
         // Chama o método para setar os novos valores na tabela
         setModel(carrinho, jTableItensEntrada);
     }
@@ -473,7 +485,7 @@ public class EntradaProduto extends javax.swing.JFrame {
     }
 
     //Preenchimento da ComboBox Vendedores
-    public void preencherCombo() {
+    public void preencherComboVendedores() {
         conecta.conexao();
         conecta.executaSQL("select * from vendedor order by NOME_VENDEDOR");
 
@@ -493,7 +505,7 @@ public class EntradaProduto extends javax.swing.JFrame {
         ArrayList dados = new ArrayList();
 
         //Na String, inserir os nomes das colunas conforme informações que serão apresentadas
-        String[] Colunas = new String[]{"", "Descricao Produto", "Preço Unitario", "Qtd Atual de Estoque"};
+        String[] Colunas = new String[]{"", "Descricao Produto", "Preço Unitario", "Estoque Atual"};
 
         //Inicia conexão com banco
         conecta.executaSQL(SQL);
@@ -517,11 +529,11 @@ public class EntradaProduto extends javax.swing.JFrame {
         jTablePesquisaProduto.setModel(modelo);
         jTablePesquisaProduto.getColumnModel().getColumn(0).setPreferredWidth(0);
         jTablePesquisaProduto.getColumnModel().getColumn(0).setResizable(false);
-        jTablePesquisaProduto.getColumnModel().getColumn(1).setPreferredWidth(275);
+        jTablePesquisaProduto.getColumnModel().getColumn(1).setPreferredWidth(324);
         jTablePesquisaProduto.getColumnModel().getColumn(1).setResizable(false);
         jTablePesquisaProduto.getColumnModel().getColumn(2).setPreferredWidth(115);
         jTablePesquisaProduto.getColumnModel().getColumn(2).setResizable(false);
-        jTablePesquisaProduto.getColumnModel().getColumn(3).setPreferredWidth(110);
+        jTablePesquisaProduto.getColumnModel().getColumn(3).setPreferredWidth(150);
         jTablePesquisaProduto.getColumnModel().getColumn(3).setResizable(false);
         jTablePesquisaProduto.getTableHeader().setReorderingAllowed(false);
         jTablePesquisaProduto.setAutoResizeMode(jTablePesquisaProduto.AUTO_RESIZE_OFF);

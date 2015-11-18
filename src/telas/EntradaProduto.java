@@ -16,13 +16,14 @@ import java.util.ArrayList;
 //import java.util.logging.Logger;
 //import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
+//import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 //import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import sqlconexao.ConectaBanco;
 import classes.Entrada;
+import javax.swing.table.DefaultTableModel;
 import utilitarios.ModeloTabela;
 
 /**
@@ -391,8 +392,8 @@ public class EntradaProduto extends javax.swing.JFrame {
 
             lblNotificacao.setForeground(Color.blue);
             lblNotificacao.setText("Produto adicionado na lista de entrada!");
-            
-            adicionarCarrinho(entrarEstoque);
+
+            preencherJtableItensEntrada(entrarEstoque);
         }
     }//GEN-LAST:event_btnAdicionarEntradaActionPerformed
 
@@ -455,35 +456,6 @@ public class EntradaProduto extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    //Função para adicionar todos os produtos no carrinho
-    public void adicionarCarrinho(ArrayList dados) {
-        
-        // Nome das colunas que serão mostradas na tabela
-        String[] colunas = new String[]{"Descricao Produto", "Quantidade"};
-        
-        // Adiciona no ArrayList um produto novo.
-        dados.add(new String[]{txtDescricao.getText(), txtQtd.getText()});
-        
-        // Cria o modelo de tabela
-        ModeloTabela carrinho = new ModeloTabela(dados, colunas);
-        
-        // Chama o método para setar os novos valores na tabela
-        setModel(carrinho, jTableItensEntrada);
-    }
-
-    public void setModel(ModeloTabela modelo, JTable tabela) {
-        tabela.setModel(modelo);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(408);
-        tabela.getColumnModel().getColumn(0).setResizable(false);
-
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tabela.getColumnModel().getColumn(1).setResizable(false);
-
-        tabela.getTableHeader().setReorderingAllowed(false);
-        tabela.setAutoResizeMode(tabela.AUTO_RESIZE_OFF);
-        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    }
-
     //Preenchimento da ComboBox Vendedores
     public void preencherComboVendedores() {
         conecta.conexao();
@@ -538,6 +510,25 @@ public class EntradaProduto extends javax.swing.JFrame {
         jTablePesquisaProduto.getTableHeader().setReorderingAllowed(false);
         jTablePesquisaProduto.setAutoResizeMode(jTablePesquisaProduto.AUTO_RESIZE_OFF);
         jTablePesquisaProduto.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
+    private void preencherJtableItensEntrada(ArrayList<Entrada> colecao) {
+
+        //Aqui carrego minha lista
+        DefaultTableModel modeloTable = new DefaultTableModel();
+
+        modeloTable.setColumnIdentifiers(new String[]{"Descrição do Produto", "Quantidade inserida"});
+
+        //Aqui verifico se a jTable tem algum registo se tiver eu deleto
+        while (modeloTable.getRowCount() > 0) {
+            modeloTable.removeRow(0);
+        }
+
+        //Aqui eu adiciono cada linha da lista na jTable
+        for (Entrada c : colecao) {
+            modeloTable.addRow(new Object[]{c.getDescricaoProduto(), c.getQtdItem()});
+        }
+        jTableItensEntrada.setModel(modeloTable);
     }
 
     /*

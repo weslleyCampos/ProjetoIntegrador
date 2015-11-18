@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import sqlconexao.ConectaBanco;
-import utilitarios.Vendas;
+import classes.Vendas;
 
 /**
  *

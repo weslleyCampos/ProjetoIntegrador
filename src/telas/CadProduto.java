@@ -370,7 +370,7 @@ public final class CadProduto extends javax.swing.JFrame {
         int saida = JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        if (JOptionPane.YES_OPTION == saida && dao.consultarQtd((Integer.parseInt(txtcodProduto.getText())))==true ) {
+        if (JOptionPane.YES_OPTION == saida  ) {
             est.setCodProd(idprod);
             est.deletProd(est);
             limpaCampos();
@@ -437,7 +437,7 @@ public final class CadProduto extends javax.swing.JFrame {
         } //        setando valores em variaveis
         else {
             String Descricao = (txtDescricao.getText());
-            String preco = (txtPreco.getText());
+            double preco = (Double.parseDouble(txtPreco.getText()));
             int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
             int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
 
@@ -467,7 +467,7 @@ public final class CadProduto extends javax.swing.JFrame {
 
         String valorcombo = CbModelo.getSelectedItem().toString();
         est.setDescricao(txtDescricao.getText());
-        est.setPreco(txtPreco.getText());
+        est.setPreco(Double.parseDouble(txtPreco.getText()));
         est.setIdModelo(est.buscaModelo(valorcombo));
         est.setQtdMax(Integer.parseInt(txtQtdMax.getText()));
         est.setQtdMin(Integer.parseInt(txtQtdMin.getText()));

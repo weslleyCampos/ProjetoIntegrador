@@ -18,7 +18,7 @@ public class Produtos  {
     ProdutosDAO dao= new ProdutosDAO();
     private static int codProd;
     private static String descricao;
-    private static String preco;
+    private static double preco;
     private static int qtdMax;
     private static int qtdMin;
     private static  int idModelo;
@@ -48,7 +48,7 @@ public class Produtos  {
         return true;
     }
 
-    public Produtos(String descricao, String preco, int qtdMax, int qtdMin, int idModelo) {
+    public Produtos(String descricao, double preco, int qtdMax, int qtdMin, int idModelo) {
         this.descricao = descricao;
         this.preco = preco;
         this.qtdMax = qtdMax;
@@ -104,11 +104,11 @@ public class Produtos  {
         this.descricao = descricao;
     }
 
-    public String getPreco() {
+    public double getPreco() {
         return preco;
     }
 
-    public void setPreco(String preco) {
+    public void setPreco(double preco) {
         this.preco = preco;
     }
 

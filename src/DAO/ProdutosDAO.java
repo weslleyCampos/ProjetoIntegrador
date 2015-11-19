@@ -8,7 +8,7 @@ package DAO;
 import utilitarios.Dados;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import classes.Estoque;
+import classes.Produtos;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import sqlconexao.ConectaBanco;
@@ -23,7 +23,7 @@ public class ProdutosDAO {
     PreparedStatement stm = null;
     Dados lisDados = new Dados();
 
-    public Estoque salvarDados(Estoque obj) throws Exception {
+    public Produtos salvarDados(Produtos obj) throws Exception {
 //        inseerção de dados a partir do objetos estoque passado por parametro na classe
         try {
             String sql = "insert into PRODUTO(DESCRICAO_PRODUTO,ID_MODELO,PRECO_UNITARIO,QTD_MINIMO,QTD_MAXIMO) values(?,?,?,?,?)";
@@ -51,7 +51,7 @@ public class ProdutosDAO {
         return obj;
     }
 
-    public boolean consultarEstoque(Estoque pesq) {
+    public boolean consultarEstoque(Produtos pesq) {
 
         PreparedStatement stm = null;
 
@@ -65,7 +65,7 @@ public class ProdutosDAO {
 
     }
 
-    public void delete(Estoque del) {
+    public void delete(Produtos del) {
         conecta.conexao();
         try {
 //            executa um comando sql de DELETE da tabela produto onde o id_produto for igual ao retorno 
@@ -85,7 +85,7 @@ public class ProdutosDAO {
         }
     }
 
-    public Estoque atualizaDados(Estoque at) {
+    public Produtos atualizaDados(Produtos at) {
 
         conecta.conexao();
         try {

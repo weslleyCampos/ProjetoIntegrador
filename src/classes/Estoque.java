@@ -12,7 +12,9 @@ import DAO.ProdutosDAO;
  */
 public class Estoque  {
 
-    ProdutosDAO daoest= new ProdutosDAO();
+   
+    
+    ProdutosDAO daoEst= new ProdutosDAO();
     private static int codProd;
     private static String descricao;
     private static double preco;
@@ -55,20 +57,32 @@ public class Estoque  {
 // metodo de conexão com banco de dados via objeto.
     public void salvarestoque(Object esyo){
          try {
-                daoest.salvarDados((Estoque) esyo);
+                daoEst.salvarDados((Estoque) esyo);
             } catch (Exception ex) {
                 System.out.println("Erro ao incluir dados"+ex);
             }        
     }
+    public String preencheTab(){
+        String saida= "select p.ID_PRODUTO,p.DESCRICAO_PRODUTO,m.MODELO,p.PRECO_UNITARIO, p.QTD_MAXIMO,p.QTD_MINIMO\n"
+                + "from produto p\n"
+                + "inner join  modelo_produto m\n"
+                + "on p.id_modelo = m.id_modelo;\n";
+        return saida;
+    }
+            
     
+    public int buscaModelo(String model){
+        int saida= daoEst.buscarCodigModelo(model);
+        return saida;
+    }
     public void atualizaDados(Object refresh){
         
-        daoest.atualizaDados((Estoque) refresh);
+        daoEst.atualizaDados((Estoque) refresh);
     }
     
     public void deletProd(Object d){
         
-        daoest.delete((Estoque) d);
+        daoEst.delete((Estoque) d);
     }
    
 
@@ -121,7 +135,6 @@ public class Estoque  {
     }
 
   
-
 
     
 }

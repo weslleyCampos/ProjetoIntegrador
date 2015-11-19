@@ -8,6 +8,7 @@ package sqlconexao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import static java.sql.ResultSet.TYPE_SCROLL_INSENSITIVE;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -59,10 +60,13 @@ public class ConectaBanco {
 
     public void executaSQL(String sql) {
         try {
-            stm = conn.createStatement(rs.TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);
+            stm = conn.createStatement(TYPE_SCROLL_INSENSITIVE, rs.CONCUR_READ_ONLY);
             rs = stm.executeQuery(sql);
         } catch (SQLException ex) {
-            //JOptionPane.showMessageDialog(null, "Erro de Executa SQL!\n" + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro de Executa SQL!\n" + ex.getMessage());
+        }
+        catch(NullPointerException ex){
+            System.out.println("Erro ao conectar");
         }
     }
 

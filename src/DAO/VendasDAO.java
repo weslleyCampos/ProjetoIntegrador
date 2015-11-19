@@ -22,7 +22,7 @@ public class VendasDAO {
     int codigoVendedor;
     PreparedStatement pst = null;
     PreparedStatement pst1 = null;
-
+    Vendas vend= new Vendas();
     public VendasDAO() {
         conecta.conexao();
     }
@@ -35,15 +35,16 @@ public class VendasDAO {
         try {
             // Insere os dados na tabela MOVIMENTACAO_SAIDA
             String sqlIn = "insert into MOVIMENTACAO_SAIDA (id_vendedor, descricao, data_saida, preco_total, qtd) values (?,?,?,?,?)";
-
+    conecta.executaSQL("select * from movimentacao_saida where QTD = ?");
+    int atual = conecta.rs.getInt("qtd");
             pst = conecta.conn.prepareStatement(sqlIn);
 
             pst.setInt(1, codigoVendedor);
             pst.setString(2, venda.getDescricaoProduto());
             pst.setString(3, venda.getDataSaida());
             pst.setDouble(4, venda.getPrecoTotal());
-            pst.setInt(5, venda.getQtdItem());
-            pst.executeUpdate();
+            pst.setInt(5,(atual- venda.getQtdItem()));
+            pst.execute();
             pst.close();
 
             // Atualiza a quantidade atual do produto em estoque

@@ -5,7 +5,7 @@
  */
 package utilitarios;
 
-import classes.Estoque;
+import classes.Produtos;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +14,6 @@ import java.util.List;
  * @author rafael Mello
  */
 public class Dados {
-    public static List<Estoque> ListaEstoque = new ArrayList<>();
+    public static List<Produtos> ListaEstoque = new ArrayList<>();
 
 }

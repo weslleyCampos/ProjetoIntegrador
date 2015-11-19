@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import classes.Login;
-import classes.Estoque;
+import classes.Produtos;
 
 /**
  *

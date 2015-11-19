@@ -1,6 +1,7 @@
 package classes;
 //import telas.FrameLog;
 import DAO.ProdutosDAO;
+import java.util.ArrayList;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,19 +11,19 @@ import DAO.ProdutosDAO;
  *
  * @author rafael Mello
  */
-public class Estoque  {
+public class Produtos  {
 
    
     
-    ProdutosDAO daoEst= new ProdutosDAO();
+    ProdutosDAO dao= new ProdutosDAO();
     private static int codProd;
     private static String descricao;
-    private static double preco;
+    private static String preco;
     private static int qtdMax;
     private static int qtdMin;
     private static  int idModelo;
 
-    public Estoque() {
+    public Produtos() {
     }
 
     @Override
@@ -40,14 +41,14 @@ public class Estoque  {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Estoque other = (Estoque) obj;
+        final Produtos other = (Produtos) obj;
         if (this.codProd != other.codProd) {
             return false;
         }
         return true;
     }
 
-    public Estoque(String descricao, double preco, int qtdMax, int qtdMin, int idModelo) {
+    public Produtos(String descricao, String preco, int qtdMax, int qtdMin, int idModelo) {
         this.descricao = descricao;
         this.preco = preco;
         this.qtdMax = qtdMax;
@@ -57,7 +58,7 @@ public class Estoque  {
 // metodo de conexão com banco de dados via objeto.
     public void salvarestoque(Object esyo){
          try {
-                daoEst.salvarDados((Estoque) esyo);
+                dao.salvarDados((Produtos) esyo);
             } catch (Exception ex) {
                 System.out.println("Erro ao incluir dados"+ex);
             }        
@@ -67,22 +68,23 @@ public class Estoque  {
                 + "from produto p\n"
                 + "inner join  modelo_produto m\n"
                 + "on p.id_modelo = m.id_modelo;\n";
+        
         return saida;
     }
             
     
     public int buscaModelo(String model){
-        int saida= daoEst.buscarCodigModelo(model);
+        int saida= dao.buscarCodigModelo(model);
         return saida;
     }
     public void atualizaDados(Object refresh){
         
-        daoEst.atualizaDados((Estoque) refresh);
+        dao.atualizaDados((Produtos) refresh);
     }
     
     public void deletProd(Object d){
         
-        daoEst.delete((Estoque) d);
+        dao.delete((Produtos) d);
     }
    
 
@@ -102,11 +104,11 @@ public class Estoque  {
         this.descricao = descricao;
     }
 
-    public Double getPreco() {
+    public String getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(String preco) {
         this.preco = preco;
     }
 
@@ -134,7 +136,9 @@ public class Estoque  {
         this.idModelo = idModelo;
     }
 
-  
+  public ArrayList dados(String SQL){
+          
 
-    
+    return dao.preencheDados(SQL);
+}
 }

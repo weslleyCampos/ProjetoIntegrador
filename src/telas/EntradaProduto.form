@@ -66,8 +66,6 @@
                       <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtIDEntrada" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -89,7 +87,6 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" pref="21" max="-2" attributes="0"/>
-                  <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtIDEntrada" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -300,7 +297,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnAdicionarEntrada">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Adicionar ao Carrinho"/>
+            <Property name="text" type="java.lang.String" value="Adicionar item"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdicionarEntradaActionPerformed"/>
@@ -342,11 +339,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="ID Entrada"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JTextField" name="txtIDEntrada">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
@@ -359,7 +351,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnRetiraProduto">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Excluir do Carrinho"/>
+        <Property name="text" type="java.lang.String" value="Excluir item"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRetiraProdutoActionPerformed"/>

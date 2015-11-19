@@ -21,6 +21,7 @@ public class VendasDAO {
     ConectaBanco conecta = new ConectaBanco();
     int codigoVendedor;
     PreparedStatement pst = null;
+    PreparedStatement pst1 = null;
 
     public VendasDAO() {
         conecta.conexao();
@@ -29,13 +30,14 @@ public class VendasDAO {
     public void confirmaVenda(Vendas venda) {
 
         buscarCodigoVendedor(venda.getIdVendedor());
-
+        conecta.conexao();
+        
         try {
-            String sql = "insert into MOVIMENTACAO_SAIDA (id_vendedor, descricao, data_saida, preco_total, qtd) values (?,?,?,?,?)";
-            conecta.conexao();
-            pst = conecta.conn.prepareStatement(sql);
+            // Insere os dados na tabela MOVIMENTACAO_SAIDA
+            String sqlIn = "insert into MOVIMENTACAO_SAIDA (id_vendedor, descricao, data_saida, preco_total, qtd) values (?,?,?,?,?)";
 
-            //PreparedStatement pst = conecta.conn.prepareStatement("insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)");
+            pst = conecta.conn.prepareStatement(sqlIn);
+
             pst.setInt(1, codigoVendedor);
             pst.setString(2, venda.getDescricaoProduto());
             pst.setString(3, venda.getDataSaida());
@@ -43,11 +45,21 @@ public class VendasDAO {
             pst.setInt(5, venda.getQtdItem());
             pst.executeUpdate();
             pst.close();
-            conecta.conn.close();
-            
-//            JOptionPane.showMessageDialog(null, "Produto adicionado no carrinho");
+
+            // Atualiza a quantidade atual do produto em estoque
+            String sqlOut = "update produto set QTD_ESTOQUE = QTD_ESTOQUE - ? where ID_PRODUTO =?";
+
+            pst1 = conecta.conn.prepareStatement(sqlOut);
+
+            pst1.setInt(1, venda.getQtdItem());
+            pst1.setInt(2, venda.getIdProduto());
+            pst1.executeUpdate();
+            pst1.close();
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro " + ex);
+        } finally {
+            conecta.desconecta();
         }
     }
 
@@ -59,12 +71,14 @@ public class VendasDAO {
             codigoVendedor = conecta.rs.getInt("id_vendedor");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao buscar codigo do vendedor.\n" + ex);
+        } finally {
+            conecta.desconecta();
         }
-        conecta.desconecta();
     }
 
     /**
      * Preenche o ComboBox com os nomes dos vendedores
+     *
      * @param comboBox
      */
     public void preencherCombo(JComboBox comboBox) {
@@ -78,8 +92,9 @@ public class VendasDAO {
             } while (conecta.rs.next());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar os vendedores!\n" + ex.getMessage());
+        } finally {
+            conecta.desconecta();
         }
-
     }
 
 }

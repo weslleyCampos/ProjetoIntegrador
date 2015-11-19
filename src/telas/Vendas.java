@@ -17,19 +17,17 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import sqlconexao.ConectaBanco;
 import utilitarios.ModeloTabela;
-
+ 
 /**
  *
  * @author Giovane PSimoes
  */
 public class Vendas extends javax.swing.JFrame {
 
-//    ConectaBanco conecta = new ConectaBanco(); // instância da classe de Conexão
-    DecimalFormat df = new DecimalFormat("0.00");
-    ArrayList dadosCarrinho = new ArrayList(); // Array que vai adicionando produtos no Carrinho.
+    DecimalFormat df = new DecimalFormat("0.00"); // Formata a string do campo Preço Total
+    ArrayList dadosCarrinho = new ArrayList(); // ArrayList que vai adicionando produtos no Carrinho.
     String[] colunasCarrinho = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"}; // Colunas da tabela carrinho
     VendasDAO vendasDAO = new VendasDAO();
-    int idSaida = 0;
     ConectaBanco conecta = new ConectaBanco();
 
     /**
@@ -38,8 +36,11 @@ public class Vendas extends javax.swing.JFrame {
     public Vendas() {
         initComponents();
         this.setLocationRelativeTo(null);
-        preencherTabela("select * from PRODUTO order by ID_PRODUTO", jTable_Pesquisa);
+        //Pega no banco de dados, todos os produtos para jogar na tabela de Pesquisa
+        preencherTabela("select * from PRODUTO order by ID_PRODUTO", jTable_Pesquisa); 
+        //Preenche o combobox com os nomes dos vendedores
         vendasDAO.preencherCombo(jCombo_Vendedor);
+        //Seta o campo valor total para 0;
         jText_ValorTotal.setText("0.00");
     }
 
@@ -253,7 +254,7 @@ public class Vendas extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jText_ValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -289,15 +290,13 @@ public class Vendas extends javax.swing.JFrame {
         // Adiciona os valores preenchidos dos campos para a tabela carrinho.
         // Todos os campos devem ser preenchidos
         if (!jText_Quantidade.getText().trim().equals("")) {
-            // Valores para comparar a disponibilidade de estoque
-            int qtd = Integer.parseInt(jText_Quantidade.getText());
-            int qtdDisp = Integer.parseInt(jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 3).toString());
+            // Valores usados para comparar a quantidade digitada com a disponibilidade de estoque
+            int qtd = Integer.parseInt(jText_Quantidade.getText()); //Converte para int o valor do campo de texto quantidade
+            int qtdDisp = Integer.parseInt(jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 3).toString()); //Converte a quantidade de estoque da tabela para int.
             // Testa se tem quantidade disponível
-            if (qtd <= qtdDisp) {
-                adicionarCarrinho(dadosCarrinho);
-                // Atualiza a quantidade disponivel na tabela pesquisa
-                atualizaQtdDisp(jTable_Pesquisa, jTable_Pesquisa.getSelectedRow(), 3);
-                atualizaPrecoTotal();
+            if (qtd <= qtdDisp) { //A quantidade digitada é menor que a disponível.
+                adicionarCarrinho(dadosCarrinho); //Adiciona o produto na tabela Carrinho
+                atualizaPrecoTotal(); //Atualiza o preço total
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Quantidade não disponível!");
             }
@@ -311,7 +310,7 @@ public class Vendas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_SairActionPerformed
 
     private void jTable_PesquisaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_PesquisaMouseClicked
-        // Guarda os valores dos campos da tabela que voce clicou em variáveis
+        // Captura os valores da tabela Pesquisa, da linha em que o usurário clicou
         String idProduto = "" + jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 0);
         String descProduto = "" + jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 1);
         String valor = "" + jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 2);
@@ -336,6 +335,7 @@ public class Vendas extends javax.swing.JFrame {
     private void jButton_ConfirmVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConfirmVendaActionPerformed
         // Testa se o carrinho não está limpo
         if (jTable_Carrinho.getRowCount() > 0) {
+            // Varre a tabela carrinho para guardar as informações de cada linha e criar Objetos
             for (int i = 0; i < jTable_Carrinho.getRowCount(); i++) {
                 //Pegando informação dos campos da tabela
                 String vendedor = jCombo_Vendedor.getSelectedItem().toString(); //Pego o nome do vendedor
@@ -344,6 +344,7 @@ public class Vendas extends javax.swing.JFrame {
                 String descricao = jTable_Carrinho.getValueAt(i, 1).toString(); //Pega o modelo
                 double preco = (Double) jTable_Carrinho.getValueAt(i, 3); //Pega o modelo
 
+                //Cria um objeto com as informações de cada linha da tabela Carrinho
                 classes.Vendas s = new classes.Vendas();
                 s.setIdVendedor(vendedor);
                 s.setDataSaida(dataAtual);
@@ -351,7 +352,7 @@ public class Vendas extends javax.swing.JFrame {
                 s.setDescricaoProduto(descricao);
                 s.setPrecoTotal(preco);
 
-                vendasDAO.confirmaVenda(s);
+                vendasDAO.confirmaVenda(s); //Insere os objetos no banco de dados.
 
             }
 
@@ -368,36 +369,23 @@ public class Vendas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_ConfirmVendaActionPerformed
 
-    /**
-     *
-     * @param j
-     * @param row
-     * @param col
-     */
-    public void atualizaQtdDisp(JTable j, int row, int col) {
-        String[] colunas = new String[]{"Código", "Descricao Produto", "Preço Unitario", "Qtd Atual de Estoque"};
-        ArrayList dados = new ArrayList();
-        dados.add(new Object[]{j.getValueAt(row, 0), j.getValueAt(row, 1), j.getValueAt(row, 2), j.getValueAt(row, 3)});
-        j.setValueAt(500,row, 3);        
-        ModeloTabela modelo = new ModeloTabela(dados, colunas);
-        setModel(modelo, j);
-    }
 
     /**
-     *
-     * @param total
+     * Atualiza o preço total dos produtos e insere no campo de texto Total
+     * 
      */
     public void atualizaPrecoTotal() {
         //String soma;
         double soma = 0;
+        //Cria um modelo de tabela
         ModeloTabela carrinho = new ModeloTabela(dadosCarrinho, colunasCarrinho);
         setModel(carrinho, jTable_Carrinho);
-
+        //Varre a tabela carrinho pegando o preço total de cada produto
         for (int i = 0; i < carrinho.getRowCount(); i++) {
-            String valor = carrinho.getValueAt(i, 3).toString();
-            soma += Double.parseDouble(valor);
+            String valor = carrinho.getValueAt(i, 3).toString(); //Pega o preço total de cada produto
+            soma += Double.parseDouble(valor); //Vai somando
         }
-        jText_ValorTotal.setText(df.format(soma));
+        jText_ValorTotal.setText(df.format(soma)); //Mostra o preço total da compra
 
     }
 
@@ -417,6 +405,7 @@ public class Vendas extends javax.swing.JFrame {
      * @param linha
      */
     public void excluirCarrinho(ArrayList dados, int linha) {
+        //Testa se foi selecionado alguma linha da tabela Carrinho
         if (linha > -1) {
             // Cria um modelo de tabela
             ModeloTabela carrinho = new ModeloTabela(dados, colunasCarrinho);
@@ -458,6 +447,8 @@ public class Vendas extends javax.swing.JFrame {
         setModel(modelo, tabela);
 
     }
+    
+    
 
     /**
      *
@@ -495,7 +486,7 @@ public class Vendas extends javax.swing.JFrame {
 
         tabela.getTableHeader().setReorderingAllowed(false);
         tabela.setAutoResizeMode(tabela.AUTO_RESIZE_OFF);
-        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);//Permite que seja selecionado 1 linha por vez
     }
 
     /**

@@ -1,6 +1,6 @@
 package classes;
 //import telas.FrameLog;
-import DAO.EstoqueDAO;
+import DAO.ProdutosDAO;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,7 +12,7 @@ import DAO.EstoqueDAO;
  */
 public class Estoque  {
 
-    EstoqueDAO daoest= new EstoqueDAO();
+    ProdutosDAO daoest= new ProdutosDAO();
     private static int codProd;
     private static String descricao;
     private static double preco;

@@ -16,12 +16,12 @@ import sqlconexao.ConectaBanco;
  *
  * @author rafael Mello
  */
-public class EstoqueDAO {
-
+public class ProdutosDAO {
 
     ConectaBanco conecta = new ConectaBanco();
     PreparedStatement stm = null;
-Dados lisDados= new Dados();
+    Dados lisDados = new Dados();
+
     public Estoque salvarDados(Estoque obj) throws Exception {
 //        inseerção de dados a partir do objetos estoque passado por parametro na classe
         try {
@@ -72,7 +72,7 @@ Dados lisDados= new Dados();
             String sql = "delete from modelo_produto where MODELO = ? ";
             stm = conecta.conn.prepareStatement(sql);
             stm.setInt(1, del.getCodProd());
-            
+
             stm.execute();
             JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
 
@@ -95,10 +95,10 @@ Dados lisDados= new Dados();
             stm.setString(1, at.getDescricao());
             stm.setInt(2, at.getIdModelo());
             stm.setInt(3, at.getCodProd());
-            
+
             stm.execute();
             JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso !!");
-            
+
         } catch (SQLException ex) {
             System.out.println("não foi possivel atualização ");
         } catch (NullPointerException ex) {
@@ -107,13 +107,14 @@ Dados lisDados= new Dados();
         }
         return at;
     }
-int codModelo;
-     public int buscarCodigModelo(String nome) {
+    int codModelo;
+
+    public int buscarCodigModelo(String nome) {
         conecta.conexao();
         conecta.executaSQL("select * from modelo_produto where MODELO = '" + nome + "'");
         try {
             conecta.rs.first();
-           codModelo = conecta.rs.getInt("id_modelo");
+            codModelo = conecta.rs.getInt("id_modelo");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao buscar codigo do vendedor.\n" + ex);
         }

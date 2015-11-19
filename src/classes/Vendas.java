@@ -24,7 +24,7 @@ public class Vendas {
     private int qtdItem;
     private String descricaoProduto;
     private double precoTotal;
-
+    
     
     public int getIdSaida() {
         return idSaida;

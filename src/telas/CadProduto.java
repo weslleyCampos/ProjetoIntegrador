@@ -6,28 +6,11 @@
 package telas;
 
 import utilitarios.ModeloTabela;
-import javax.swing.text.DefaultFormatterFactory;
-import DAO.DaoProdutos;
-import java.awt.Choice;
-import java.awt.HeadlessException;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import DAO.ProdutosDAO;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
-import java.awt.event.ItemListener;
-import java.sql.JDBCType;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Action;
 import javax.swing.ListSelectionModel;
-import javax.swing.text.MaskFormatter;
 import sqlconexao.ConectaBanco;
 import classes.Estoque;
 
@@ -37,7 +20,7 @@ import classes.Estoque;
  */
 public class CadProduto extends javax.swing.JFrame {
 
-    DaoProdutos dao = new DaoProdutos();
+    ProdutosDAO dao = new ProdutosDAO();
     Estoque est = new Estoque();
     ConectaBanco conectar = new ConectaBanco();
 

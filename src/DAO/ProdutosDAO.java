@@ -9,6 +9,7 @@ import utilitarios.Dados;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import classes.Estoque;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import sqlconexao.ConectaBanco;
 
@@ -121,6 +122,26 @@ public class ProdutosDAO {
         conecta.desconecta();
         return codModelo;
 
+    }
+
+    public ArrayList preencheDados(String sql) {
+        conecta.conexao();
+        conecta.executaSQL(sql);
+        ArrayList dados = new ArrayList();
+
+        try {
+            conecta.rs.first();
+            do {
+//                adiciona novos valores de objeto a tabela pelo comando add e result set do banco
+                dados.add(new Object[]{conecta.rs.getInt("ID_PRODUTO"), conecta.rs.getString("MODELO"),
+                    conecta.rs.getString("DESCRICAO_PRODUTO"), conecta.rs.getInt("PRECO_UNITARIO"), conecta.rs.getInt("QTD_MAXIMO"), conecta.rs.getInt("QTD_MINIMO")});
+            } while (conecta.rs.next());
+        } catch (SQLException ex) {
+            System.out.println("Erro ao preencher o array " + ex);
+        } catch (NullPointerException ex) {
+            System.out.println("tabela não inicializada" + ex);
+        }
+        return dados;
     }
 
     //associa o nome do modelo ao codigo do produto

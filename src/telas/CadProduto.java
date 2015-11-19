@@ -7,7 +7,7 @@ package telas;
 
 import utilitarios.ModeloTabela;
 import javax.swing.text.DefaultFormatterFactory;
-import DAO.EstoqueDAO;
+import DAO.DaoProdutos;
 import java.awt.Choice;
 import java.awt.HeadlessException;
 import javax.swing.JButton;
@@ -37,12 +37,18 @@ import classes.Estoque;
  */
 public class CadProduto extends javax.swing.JFrame {
 
-    EstoqueDAO dao = new EstoqueDAO();
+    DaoProdutos dao = new DaoProdutos();
     Estoque est = new Estoque();
     ConectaBanco conectar = new ConectaBanco();
 
     public Integer idmod;
     public Integer idprod;
+    public String comparaDesc;
+    public String comparapreco;
+    public String comparaQtdMax;
+    public String comparaQtdMin;
+    
+    
 
     /**
      * Creates new form Estoque
@@ -76,12 +82,7 @@ public class CadProduto extends javax.swing.JFrame {
         btnAtualiza.setVisible(false);
         btnDelete.setVisible(false);
 
-         preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
-                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
-                
-"from produto p\n" +
-"inner join  modelo_produto m\n" +
-"on p.id_modelo = m.id_modelo;");
+       preencheTabela(est.preencheTab());
     }
 
     /**
@@ -96,7 +97,6 @@ public class CadProduto extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -128,9 +128,7 @@ public class CadProduto extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, java.awt.Color.darkGray));
 
-        jLabel1.setText("Codigo do Produto:");
-
-        jLabel10.setText("Codigo Modelo:");
+        jLabel1.setText("Codigo Produto:");
 
         jLabel3.setText("Descrição Modelo:");
 
@@ -152,6 +150,12 @@ public class CadProduto extends javax.swing.JFrame {
         txtcodProduto.setEditable(false);
 
         txtQtdMax.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
+
+        txtPreco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecoActionPerformed(evt);
+            }
+        });
 
         CbModelo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -180,7 +184,7 @@ public class CadProduto extends javax.swing.JFrame {
 
         jButton2.setText("Limpar");
 
-        btnFechar.setText("Cancelar");
+        btnFechar.setText("Sair");
         btnFechar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFecharActionPerformed(evt);
@@ -199,9 +203,9 @@ public class CadProduto extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(52, 52, 52)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -229,9 +233,8 @@ public class CadProduto extends javax.swing.JFrame {
                                                     .addComponent(txtQtdMin))
                                                 .addGap(41, 41, 41)))
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))
+                                            .addComponent(jLabel1)
+                                            .addComponent(jLabel6))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtQtdMax)
@@ -240,15 +243,16 @@ public class CadProduto extends javax.swing.JFrame {
                                     .addComponent(txtDescricao))
                                 .addGap(55, 55, 55))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(btnSlavar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnMod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnFechar)
-                        .addGap(43, 43, 43)))
-                .addGap(71, 71, 71))
+                        .addGap(97, 97, 97)))
+                .addGap(29, 29, 29))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,7 +261,6 @@ public class CadProduto extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(CbModelo)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cbCodMod))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -335,17 +338,17 @@ public class CadProduto extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, Short.MAX_VALUE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(65, 65, 65)
                 .addComponent(lbTAbela, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(32, 32, 32)
-                .addComponent(btnAtualiza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAtualiza, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(171, 171, 171))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,11 +356,10 @@ public class CadProduto extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbTAbela, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAtualiza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnAtualiza, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDelete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -369,8 +371,8 @@ public class CadProduto extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -390,21 +392,22 @@ public class CadProduto extends javax.swing.JFrame {
 
         if (JOptionPane.YES_OPTION == saida && idprod != null) {
             est.setCodProd(idprod);
-            dao.delete(est);
+            est.deletProd(est);
+            limpaCampos();
         }
-  preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
-                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
-                
-"from produto p\n" +
-"inner join  modelo_produto m\n" +
-"on p.id_modelo = m.id_modelo;");
+        preencheTabela(est.preencheTab());
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tbExibeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbExibeMouseClicked
         int indiceLinha = tbExibe.getSelectedRow();
-        cbCodMod.setSelectedIndex((int) tbExibe.getValueAt(indiceLinha, 1));
-        txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
         idprod = (int) tbExibe.getValueAt(indiceLinha, 0);
+        txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
+        txtPreco.setText(tbExibe.getValueAt(indiceLinha, 3).toString());
+        txtQtdMax.setText(tbExibe.getValueAt(indiceLinha, 4).toString());
+        txtQtdMin.setText(tbExibe.getValueAt(indiceLinha, 5).toString());
+        
+        txtcodProduto.setText(idprod.toString());
         est.setCodProd(idprod);
 
 //    est.setDescricao(txtDescricao.getText());
@@ -420,9 +423,18 @@ public class CadProduto extends javax.swing.JFrame {
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
         conectar.desconecta();
-
+        new MenuPrincipal().setVisible(true);
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnFecharActionPerformed
+
+    private void limpaCampos() {
+
+        txtDescricao.setText("");
+        txtPreco.setText("");
+        txtQtdMax.setText("");
+        txtQtdMin.setText("");
+        txtcodProduto.setText("");
+    }
 
     private void btnSlavarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlavarActionPerformed
         // TODO add your handling code here:
@@ -440,18 +452,13 @@ public class CadProduto extends javax.swing.JFrame {
             double preco = (Double.parseDouble(txtPreco.getText()));
             int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
             int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
-            int modPro = (int) (cbCodMod.getSelectedItem());
-            dao.buscarCodigModelo(valorcombo);
-            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo,  dao.buscarCodigModelo(valorcombo));
-            est.salvarestoque(e);
-        }
-      preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
-                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
-                
-"from produto p\n" +
-"inner join  modelo_produto m\n" +
-"on p.id_modelo = m.id_modelo;");
 
+            dao.buscarCodigModelo(valorcombo);
+            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo, dao.buscarCodigModelo(valorcombo));
+            est.salvarestoque(e);
+            limpaCampos();
+        }
+     
 
     }//GEN-LAST:event_btnSlavarActionPerformed
 
@@ -470,22 +477,20 @@ public class CadProduto extends javax.swing.JFrame {
     private void btnAtualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizaActionPerformed
         // TODO add your handling code here:
 
+        String valorcombo = CbModelo.getSelectedItem().toString();
         est.setDescricao(txtDescricao.getText());
-        est.setIdModelo(cbCodMod.getSelectedIndex());
-        est.atualizaDados(est);
+        est.setPreco(Double.parseDouble(txtPreco.getText()));
+        est.setIdModelo(est.buscaModelo(valorcombo));
 
-        preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
-                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
-                
-"from produto p\n" +
-"inner join  modelo_produto m\n" +
-"on p.id_modelo = m.id_modelo;");
+        est.atualizaDados(est);
+        limpaCampos();
+        preencheTabela(est.preencheTab());
     }//GEN-LAST:event_btnAtualizaActionPerformed
 
     private void tbExibeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbExibeKeyReleased
         // TODO add your handling code here:
         int indiceLinha = tbExibe.getSelectedRow();
-        
+
         txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
         txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
         est.setIdModelo(CbModelo.getSelectedIndex());
@@ -493,33 +498,27 @@ public class CadProduto extends javax.swing.JFrame {
 
     private void cbCodModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCodModActionPerformed
         // TODO add your handling code here:
+        cbCodMod.setVisible(false);
     }//GEN-LAST:event_cbCodModActionPerformed
+
+    private void txtPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecoActionPerformed
 
     public void preencheTabela(String SQL) {
         ArrayList dados = new ArrayList();
 
-        String[] Colunas = new String[]{"ID", "MODELO", "DESCRIÇÃO", "PREÇO UNITÁRIO", " QTD.MAX","QTD MIN"};
-        conectar.executaSQL(SQL);
+        String[] Colunas = new String[]{"ID", "MODELO", "DESCRIÇÃO", "PREÇO UNITÁRIO", " QTD.MAX", "QTD MIN"};
 
-        try {
-            conectar.rs.first();
-            do {
-                dados.add(new Object[]{conectar.rs.getInt("ID_PRODUTO"), conectar.rs.getString("MODELO"),
-                    conectar.rs.getString("DESCRICAO_PRODUTO"),conectar.rs.getInt("PRECO_UNITARIO")
-                ,conectar.rs.getInt("QTD_MAXIMO"),conectar.rs.getInt("QTD_MINIMO")});
-            } while (conectar.rs.next());
-        } catch (SQLException ex) {
-            System.out.println("Erro ao preencher o array " + ex);
-        }
-        ModeloTabela model = new ModeloTabela(dados, Colunas);
+        ModeloTabela model = new ModeloTabela(dao.preencheDados(SQL), Colunas);
         tbExibe.setModel(model);
         tbExibe.getColumnModel().getColumn(0).setPreferredWidth(30);
         tbExibe.getColumnModel().getColumn(0).setResizable(false);
         tbExibe.getColumnModel().getColumn(1).setPreferredWidth(80);
         tbExibe.getColumnModel().getColumn(1).setResizable(false);
-        tbExibe.getColumnModel().getColumn(2).setPreferredWidth(170);
+        tbExibe.getColumnModel().getColumn(2).setPreferredWidth(100);
         tbExibe.getColumnModel().getColumn(2).setResizable(false);
-        tbExibe.getColumnModel().getColumn(3).setPreferredWidth(173);
+        tbExibe.getColumnModel().getColumn(3).setPreferredWidth(120);
         tbExibe.getColumnModel().getColumn(3).setResizable(false);
         tbExibe.getTableHeader().setReorderingAllowed(false);
         tbExibe.setAutoResizeMode(tbExibe.AUTO_RESIZE_OFF);
@@ -646,7 +645,6 @@ public class CadProduto extends javax.swing.JFrame {
     private javax.swing.JComboBox cbCodMod;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

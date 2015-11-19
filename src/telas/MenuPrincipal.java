@@ -193,7 +193,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_subMenuclieneActionPerformed
 
     private void subMenuVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuVendasActionPerformed
-        new Vendas().setVisible(true);
+        new TelaVendas().setVisible(true);
     }//GEN-LAST:event_subMenuVendasActionPerformed
 
     private void subMenuEntradaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuEntradaProdutoActionPerformed

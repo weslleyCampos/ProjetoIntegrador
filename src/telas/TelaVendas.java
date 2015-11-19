@@ -22,7 +22,7 @@ import utilitarios.ModeloTabela;
  *
  * @author Giovane PSimoes
  */
-public class Vendas extends javax.swing.JFrame {
+public class TelaVendas extends javax.swing.JFrame {
 
     DecimalFormat df = new DecimalFormat("0.00"); // Formata a string do campo Preço Total
     ArrayList dadosCarrinho = new ArrayList(); // ArrayList que vai adicionando produtos no Carrinho.
@@ -33,7 +33,7 @@ public class Vendas extends javax.swing.JFrame {
     /**
      * Creates new form Vendas
      */
-    public Vendas() {
+    public TelaVendas() {
         initComponents();
         this.setLocationRelativeTo(null);
         //Pega no banco de dados, todos os produtos para jogar na tabela de Pesquisa
@@ -506,20 +506,21 @@ public class Vendas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Vendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaVendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Vendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaVendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Vendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaVendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Vendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaVendas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Vendas().setVisible(true);
+                new TelaVendas().setVisible(true);
 
             }
         });

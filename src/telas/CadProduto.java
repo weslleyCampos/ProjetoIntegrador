@@ -76,8 +76,12 @@ public class CadProduto extends javax.swing.JFrame {
         btnAtualiza.setVisible(false);
         btnDelete.setVisible(false);
 
-        preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
-
+         preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
+                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
+                
+"from produto p\n" +
+"inner join  modelo_produto m\n" +
+"on p.id_modelo = m.id_modelo;");
     }
 
     /**
@@ -332,7 +336,7 @@ public class CadProduto extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 467, Short.MAX_VALUE))
                 .addContainerGap(32, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(65, 65, 65)
@@ -388,7 +392,12 @@ public class CadProduto extends javax.swing.JFrame {
             est.setCodProd(idprod);
             dao.delete(est);
         }
-        preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
+  preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
+                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
+                
+"from produto p\n" +
+"inner join  modelo_produto m\n" +
+"on p.id_modelo = m.id_modelo;");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tbExibeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbExibeMouseClicked
@@ -432,11 +441,16 @@ public class CadProduto extends javax.swing.JFrame {
             int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
             int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
             int modPro = (int) (cbCodMod.getSelectedItem());
-
-            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo, modPro);
+            dao.buscarCodigModelo(valorcombo);
+            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo,  dao.buscarCodigModelo(valorcombo));
             est.salvarestoque(e);
         }
-        preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
+      preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
+                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
+                
+"from produto p\n" +
+"inner join  modelo_produto m\n" +
+"on p.id_modelo = m.id_modelo;");
 
 
     }//GEN-LAST:event_btnSlavarActionPerformed
@@ -449,10 +463,6 @@ public class CadProduto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CbModeloActionPerformed
 
-    private void cbCodModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCodModActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbCodModActionPerformed
-
     private void CbModeloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CbModeloMouseClicked
 
     }//GEN-LAST:event_CbModeloMouseClicked
@@ -464,30 +474,39 @@ public class CadProduto extends javax.swing.JFrame {
         est.setIdModelo(cbCodMod.getSelectedIndex());
         est.atualizaDados(est);
 
-        preencheTabela("select * from  PRODUTO  order by ID_MODELO ");
+        preencheTabela("select p.ID_PRODUTO as ID_PRODUTO,p.DESCRICAO_PRODUTO as DESCRICAO_PRODUTO ,"
+                + "m.MODELO as MODELO,p.PRECO_UNITARIO as PRECO_UNITARIO , p.QTD_MAX as ,p.QTD_MIN as QTD_MIN \n" +
+                
+"from produto p\n" +
+"inner join  modelo_produto m\n" +
+"on p.id_modelo = m.id_modelo;");
     }//GEN-LAST:event_btnAtualizaActionPerformed
 
     private void tbExibeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbExibeKeyReleased
         // TODO add your handling code here:
         int indiceLinha = tbExibe.getSelectedRow();
-        cbCodMod.setSelectedIndex((int) tbExibe.getValueAt(indiceLinha, 1));
+        
         txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
         txtDescricao.setText(tbExibe.getValueAt(indiceLinha, 2).toString());
         est.setIdModelo(CbModelo.getSelectedIndex());
     }//GEN-LAST:event_tbExibeKeyReleased
 
+    private void cbCodModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCodModActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbCodModActionPerformed
+
     public void preencheTabela(String SQL) {
         ArrayList dados = new ArrayList();
 
-        String[] Colunas = new String[]{"ID", "ID MODELO", "             DESCRIÇÃO"
-            + "", "QUANTIDADE EM ESTOQUE"};
+        String[] Colunas = new String[]{"ID", "MODELO", "DESCRIÇÃO", "PREÇO UNITÁRIO", " QTD.MAX","QTD MIN"};
         conectar.executaSQL(SQL);
 
         try {
             conectar.rs.first();
             do {
-                dados.add(new Object[]{conectar.rs.getInt("ID_PRODUTO"), conectar.rs.getInt("ID_MODELO"),
-                    conectar.rs.getString("DESCRICAO_PRODUTO"), conectar.rs.getInt("QTD_ESTOQUE")});
+                dados.add(new Object[]{conectar.rs.getInt("ID_PRODUTO"), conectar.rs.getString("MODELO"),
+                    conectar.rs.getString("DESCRICAO_PRODUTO"),conectar.rs.getInt("PRECO_UNITARIO")
+                ,conectar.rs.getInt("QTD_MAXIMO"),conectar.rs.getInt("QTD_MINIMO")});
             } while (conectar.rs.next());
         } catch (SQLException ex) {
             System.out.println("Erro ao preencher o array " + ex);

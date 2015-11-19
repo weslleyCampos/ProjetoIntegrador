@@ -18,7 +18,7 @@ import sqlconexao.ConectaBanco;
  */
 public class EstoqueDAO {
 
-    int codProduto;
+
     ConectaBanco conecta = new ConectaBanco();
     PreparedStatement stm = null;
 Dados lisDados= new Dados();
@@ -69,7 +69,7 @@ Dados lisDados= new Dados();
         try {
 //            executa um comando sql de DELETE da tabela produto onde o id_produto for igual ao retorno 
 //                    de parametros via obj
-            String sql = "delete from produto where ID_PRODUTO = ? ";
+            String sql = "delete from modelo_produto where MODELO = ? ";
             stm = conecta.conn.prepareStatement(sql);
             stm.setInt(1, del.getCodProd());
             
@@ -106,6 +106,20 @@ Dados lisDados= new Dados();
 
         }
         return at;
+    }
+int codModelo;
+     public int buscarCodigModelo(String nome) {
+        conecta.conexao();
+        conecta.executaSQL("select * from modelo_produto where MODELO = '" + nome + "'");
+        try {
+            conecta.rs.first();
+           codModelo = conecta.rs.getInt("id_modelo");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao buscar codigo do vendedor.\n" + ex);
+        }
+        conecta.desconecta();
+        return codModelo;
+
     }
 
     //associa o nome do modelo ao codigo do produto

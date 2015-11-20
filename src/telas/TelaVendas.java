@@ -341,7 +341,7 @@ public class TelaVendas extends javax.swing.JFrame {
                 String vendedor = jCombo_Vendedor.getSelectedItem().toString(); //Pego o nome do vendedor
                 String dataAtual = getDateTime(); // Pegando a data do sistema
                 int qtdItem = Integer.parseInt(jTable_Carrinho.getValueAt(i, 2).toString()); //Pega a quantidade
-                String descricao = jTable_Carrinho.getValueAt(i, 1).toString(); //Pega o modelo
+                int idProduto = Integer.parseInt(jTable_Carrinho.getValueAt(i, 0).toString()); //Pega o ID_Modelo
                 double preco = (Double) jTable_Carrinho.getValueAt(i, 3); //Pega o modelo
 
                 //Cria um objeto com as informações de cada linha da tabela Carrinho
@@ -349,7 +349,7 @@ public class TelaVendas extends javax.swing.JFrame {
                 s.setIdVendedor(vendedor);
                 s.setDataSaida(dataAtual);
                 s.setQtdItem(qtdItem);
-                s.setDescricaoProduto(descricao);
+                s.setIdProduto(idProduto);
                 s.setPrecoTotal(preco);
 
                 vendasDAO.confirmaVenda(s); //Insere os objetos no banco de dados.

@@ -34,12 +34,12 @@ public class VendasDAO {
         
         try {
             // Insere os dados na tabela MOVIMENTACAO_SAIDA
-            String sqlIn = "insert into MOVIMENTACAO_SAIDA (id_vendedor, descricao, data_saida, preco_total, qtd) values (?,?,?,?,?)";
+            String sqlIn = "insert into MOVIMENTACAO_SAIDA (id_vendedor, id_produto, data_saida, preco_total, qtd) values (?,?,?,?,?)";
 
             pst = conecta.conn.prepareStatement(sqlIn);
 
             pst.setInt(1, codigoVendedor);
-            pst.setString(2, venda.getDescricaoProduto());
+            pst.setInt(2, venda.getIdProduto());
             pst.setString(3, venda.getDataSaida());
             pst.setDouble(4, venda.getPrecoTotal());
             pst.setInt(5, venda.getQtdItem());
@@ -63,6 +63,10 @@ public class VendasDAO {
         }
     }
 
+    /**
+     * 
+     * @param nome 
+     */
     public void buscarCodigoVendedor(String nome) {
         conecta.conexao();
         conecta.executaSQL("select * from vendedor where nome_vendedor = '" + nome + "'");
@@ -75,7 +79,7 @@ public class VendasDAO {
             conecta.desconecta();
         }
     }
-
+    
     /**
      * Preenche o ComboBox com os nomes dos vendedores
      *

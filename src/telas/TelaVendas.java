@@ -17,7 +17,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import sqlconexao.ConectaBanco;
 import utilitarios.ModeloTabela;
- 
+
 /**
  *
  * @author Giovane PSimoes
@@ -37,7 +37,7 @@ public class TelaVendas extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         //Pega no banco de dados, todos os produtos para jogar na tabela de Pesquisa
-        preencherTabela("select * from PRODUTO order by ID_PRODUTO", jTable_Pesquisa); 
+        preencherTabela("select * from PRODUTO order by ID_PRODUTO", jTable_Pesquisa);
         //Preenche o combobox com os nomes dos vendedores
         vendasDAO.preencherCombo(jCombo_Vendedor);
         //Seta o campo valor total para 0;
@@ -293,12 +293,32 @@ public class TelaVendas extends javax.swing.JFrame {
             // Valores usados para comparar a quantidade digitada com a disponibilidade de estoque
             int qtd = Integer.parseInt(jText_Quantidade.getText()); //Converte para int o valor do campo de texto quantidade
             int qtdDisp = Integer.parseInt(jTable_Pesquisa.getValueAt(jTable_Pesquisa.getSelectedRow(), 3).toString()); //Converte a quantidade de estoque da tabela para int.
+
+            // Valores usados para testar de já existe o mesmo produto na tabela carrinho.
+            int idProduto = Integer.parseInt(jText_CodProduto.getText()); // Id do produto selecionado na tabela Pesquisa
+            int idProdutoCarrinho; //Id do produto do carrinho para fazer a comparação
+            boolean produtoExiste = false;
+            /**
+             * Compara se o produto selecionado já existe no carrinho
+             */
+            for (int i = 0; i < jTable_Carrinho.getRowCount(); i++) {
+                idProdutoCarrinho = Integer.parseInt(jTable_Carrinho.getValueAt(i, 0).toString());
+                if (idProduto == idProdutoCarrinho) {
+                    produtoExiste = true;
+                    break;
+                }
+            }
+
             // Testa se tem quantidade disponível
-            if (qtd <= qtdDisp) { //A quantidade digitada é menor que a disponível.
+            if (qtd <= qtdDisp && !produtoExiste) { //A quantidade digitada é menor que a disponível.
                 adicionarCarrinho(dadosCarrinho); //Adiciona o produto na tabela Carrinho
-                atualizaPrecoTotal(); //Atualiza o preço total
+                atualizaPrecoTotal(); //Atualiza o preço total               
             } else {
-                JOptionPane.showMessageDialog(rootPane, "Quantidade não disponível!");
+                if (produtoExiste) {
+                    JOptionPane.showMessageDialog(rootPane, "Produto adicionado!");
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Quantidade não disponível!");
+                }
             }
         } else {
             JOptionPane.showMessageDialog(rootPane, "Preencha todos os campos!");
@@ -360,6 +380,8 @@ public class TelaVendas extends javax.swing.JFrame {
             while (jTable_Carrinho.getRowCount() > 0) {
                 excluirCarrinho(dadosCarrinho, 0);
             }
+            //Atualiza valores da tabela pesquisa
+            preencherTabela("select * from PRODUTO order by ID_PRODUTO", jTable_Pesquisa);
             //Limpa o Valor Total
             jText_ValorTotal.setText(null);
 
@@ -369,10 +391,9 @@ public class TelaVendas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_ConfirmVendaActionPerformed
 
-
     /**
      * Atualiza o preço total dos produtos e insere no campo de texto Total
-     * 
+     *
      */
     public void atualizaPrecoTotal() {
         //String soma;
@@ -447,8 +468,6 @@ public class TelaVendas extends javax.swing.JFrame {
         setModel(modelo, tabela);
 
     }
-    
-    
 
     /**
      *

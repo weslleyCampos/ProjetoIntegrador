@@ -22,7 +22,7 @@ public class VendasDAO {
     int codigoVendedor;
     PreparedStatement pst = null;
     PreparedStatement pst1 = null;
-
+    Vendas vend= new Vendas();
     public VendasDAO() {
         conecta.conexao();
     }
@@ -42,8 +42,8 @@ public class VendasDAO {
             pst.setInt(2, venda.getIdProduto());
             pst.setString(3, venda.getDataSaida());
             pst.setDouble(4, venda.getPrecoTotal());
-            pst.setInt(5, venda.getQtdItem());
-            pst.executeUpdate();
+            pst.setInt(5,(atual- venda.getQtdItem()));
+            pst.execute();
             pst.close();
 
             // Atualiza a quantidade atual do produto em estoque

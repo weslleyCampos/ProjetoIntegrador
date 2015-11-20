@@ -12,17 +12,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.ListSelectionModel;
 import sqlconexao.ConectaBanco;
-import classes.Estoque;
+import classes.Produtos;
 
 /**
  *
  * @author rafael Mello
  */
-public class CadProduto extends javax.swing.JFrame {
+public final class CadProduto extends javax.swing.JFrame {
 
     ProdutosDAO dao = new ProdutosDAO();
-    Estoque est = new Estoque();
-    ConectaBanco conectar = new ConectaBanco();
+    Produtos est = new Produtos();
+    ConectaBanco conecta = new ConectaBanco();
 
     public Integer idmod;
     public Integer idprod;
@@ -30,30 +30,27 @@ public class CadProduto extends javax.swing.JFrame {
     public String comparapreco;
     public String comparaQtdMax;
     public String comparaQtdMin;
-    
-    
 
     /**
-     * Creates new form Estoque
+     * Creates new form Produtos
      */
     public CadProduto() {
         initComponents();
-        conectar.conexao();
+        conecta.conexao();
 
         //faz o get/ Select da tabela produtos para o cbBox em ordem especificada
-        conectar.executaSQL("select * from MODELO_PRODUTO order by Id_modelo");
+        conecta.executaSQL("select * from MODELO_PRODUTO order by Id_modelo");
 
         CbModelo.removeAllItems();
-        //conectar.executaSQL("select * from MODELO_PRODUTO order by ID_MODELO");
 
         try {
-            conectar.rs.first();
+            conecta.rs.first();
             do {
 
-                CbModelo.addItem(conectar.rs.getString("MODELO"));
-                cbCodMod.addItem(conectar.rs.getInt("ID_MODELO"));
+                CbModelo.addItem(conecta.rs.getString("MODELO"));
+                cbCodMod.addItem(conecta.rs.getInt("ID_MODELO"));
 
-            } while (conectar.rs.next());
+            } while (conecta.rs.next());
 
         } catch (SQLException ex) {
             System.out.println("erro ao inserir no Combobox " + ex);
@@ -65,7 +62,7 @@ public class CadProduto extends javax.swing.JFrame {
         btnAtualiza.setVisible(false);
         btnDelete.setVisible(false);
 
-       preencheTabela(est.preencheTab());
+        preencheTabela(est.preencheTab());
     }
 
     /**
@@ -373,12 +370,16 @@ public class CadProduto extends javax.swing.JFrame {
         int saida = JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        if (JOptionPane.YES_OPTION == saida && idprod != null) {
+        if (JOptionPane.YES_OPTION == saida && idprod!=null ) {
             est.setCodProd(idprod);
             est.deletProd(est);
             limpaCampos();
+             preencheTabela(est.preencheTab());
         }
-        preencheTabela(est.preencheTab());
+        else{
+            JOptionPane.showMessageDialog(null, "Produto contêm unidades em estoque,Impossível deletar ");
+        }
+       
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -389,9 +390,13 @@ public class CadProduto extends javax.swing.JFrame {
         txtPreco.setText(tbExibe.getValueAt(indiceLinha, 3).toString());
         txtQtdMax.setText(tbExibe.getValueAt(indiceLinha, 4).toString());
         txtQtdMin.setText(tbExibe.getValueAt(indiceLinha, 5).toString());
-        
         txtcodProduto.setText(idprod.toString());
         est.setCodProd(idprod);
+        
+        comparaDesc=txtDescricao.getText();
+        comparapreco= txtPreco.getText();
+        comparaQtdMax= txtQtdMax.getText();
+        comparaQtdMin= txtQtdMin.getText();
 
 //    est.setDescricao(txtDescricao.getText());
 //    dao.consultarIdProduto(est);
@@ -405,8 +410,8 @@ public class CadProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModActionPerformed
 
     private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
-        conectar.desconecta();
-        new MenuPrincipal().setVisible(true);
+        conecta.desconecta();
+//        new MenuPrincipal().setVisible(true);
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_btnFecharActionPerformed
 
@@ -437,11 +442,11 @@ public class CadProduto extends javax.swing.JFrame {
             int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
 
             dao.buscarCodigModelo(valorcombo);
-            Estoque e = new Estoque(Descricao, preco, qtdmaximo, qtdminimo, dao.buscarCodigModelo(valorcombo));
+            Produtos e = new Produtos(Descricao,preco , qtdmaximo, qtdminimo, dao.buscarCodigModelo(valorcombo));
             est.salvarestoque(e);
             limpaCampos();
         }
-     
+
 
     }//GEN-LAST:event_btnSlavarActionPerformed
 
@@ -464,12 +469,19 @@ public class CadProduto extends javax.swing.JFrame {
         est.setDescricao(txtDescricao.getText());
         est.setPreco(Double.parseDouble(txtPreco.getText()));
         est.setIdModelo(est.buscaModelo(valorcombo));
+        est.setQtdMax(Integer.parseInt(txtQtdMax.getText()));
+        est.setQtdMin(Integer.parseInt(txtQtdMin.getText()));
 
+        if(comparaDesc.equals(txtDescricao.getText())||comparapreco.equals(txtPreco.getText())||comparaQtdMax.equals(est.getQtdMax())
+                ||comparaQtdMin.equals(est.getQtdMin())){
+            JOptionPane.showMessageDialog(this, "Não foram realizadas alterações");
+        }
+        else{
         est.atualizaDados(est);
         limpaCampos();
         preencheTabela(est.preencheTab());
     }//GEN-LAST:event_btnAtualizaActionPerformed
-
+    }
     private void tbExibeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbExibeKeyReleased
         // TODO add your handling code here:
         int indiceLinha = tbExibe.getSelectedRow();
@@ -493,7 +505,7 @@ public class CadProduto extends javax.swing.JFrame {
 
         String[] Colunas = new String[]{"ID", "MODELO", "DESCRIÇÃO", "PREÇO UNITÁRIO", " QTD.MAX", "QTD MIN"};
 
-        ModeloTabela model = new ModeloTabela(dao.preencheDados(SQL), Colunas);
+        ModeloTabela model = new ModeloTabela(est.dados(SQL), Colunas);
         tbExibe.setModel(model);
         tbExibe.getColumnModel().getColumn(0).setPreferredWidth(30);
         tbExibe.getColumnModel().getColumn(0).setResizable(false);

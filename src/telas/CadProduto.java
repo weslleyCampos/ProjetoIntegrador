@@ -370,7 +370,7 @@ public final class CadProduto extends javax.swing.JFrame {
         int saida = JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        if (JOptionPane.YES_OPTION == saida  ) {
+        if (JOptionPane.YES_OPTION == saida && idprod!=null ) {
             est.setCodProd(idprod);
             est.deletProd(est);
             limpaCampos();

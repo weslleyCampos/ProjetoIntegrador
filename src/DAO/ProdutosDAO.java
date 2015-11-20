@@ -70,7 +70,7 @@ public class ProdutosDAO {
         try {
 //            executa um comando sql de DELETE da tabela produto onde o id_produto for igual ao retorno 
 //                    de parametros via obj
-            String sql = "delete from modelo_produto where MODELO = ? ";
+            String sql = "delete from produto where ID_PRODUTO = ? ";
             stm = conecta.conn.prepareStatement(sql);
             stm.setInt(1, del.getCodProd());
 

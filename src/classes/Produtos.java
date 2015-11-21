@@ -47,7 +47,10 @@ public class Produtos  {
         }
         return true;
     }
-
+        public boolean validaQtd(int id){
+              return dao.validaQuantidadeMaxima(id);
+        }
+    
     public Produtos(String descricao, double preco, int qtdMax, int qtdMin, int idModelo) {
         this.descricao = descricao;
         this.preco = preco;

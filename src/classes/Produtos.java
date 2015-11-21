@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author rafael Mello
  */
 public class Produtos {
-
+//teste de comit
     ProdutosDAO dao = new ProdutosDAO();
     private static int codProd;
     private static String descricao;
@@ -42,7 +42,7 @@ public class Produtos {
             return false;
         }
         final Produtos other = (Produtos) obj;
-        if (this.codProd != other.codProd) {
+        if (Produtos.codProd != other.codProd) {
             return false;
         }
         return true;
@@ -54,10 +54,10 @@ public class Produtos {
     }
 
     public Produtos(String descricao, double preco, int qtdMax, int qtdMin, int idModelo) {
-        this.descricao = descricao;
-        this.preco = preco;
-        this.qtdMax = qtdMax;
-        this.qtdMin = qtdMin;
+        Produtos.descricao = descricao;
+        Produtos.preco = preco;
+        Produtos.qtdMax = qtdMax;
+        Produtos.qtdMin = qtdMin;
         this.idModelo = idModelo;
     }
 // metodo de conexão com banco de dados via objeto.

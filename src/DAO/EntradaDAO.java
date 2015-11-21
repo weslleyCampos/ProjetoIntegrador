@@ -44,8 +44,8 @@ public class EntradaDAO {
     public void salvarEntrada(ArrayList<Entrada> colecao) {
 
         /**
-         *String sqlInsert: guardar o script de comando do SQL inserir
-         * String sqlUpdate: guardar o script de comando do SQL atualizar, 
+         * String sqlInsert: guardar o script de comando do SQL inserir String
+         * sqlUpdate: guardar o script de comando do SQL atualizar,
          */
         String sqlInsert = "insert into MOVIMENTACAO_ENTRADA (id_entrada, id_produto, id_vendedor,data_chegada, qtd) values (?,?,?,?,?)";
         String sqlUpdate = "update produto set QTD_ESTOQUE=? where ID_PRODUTO=?";
@@ -58,8 +58,8 @@ public class EntradaDAO {
             pst = conecta.conn.prepareStatement(sqlInsert);
             pst1 = conecta.conn.prepareStatement(sqlUpdate);
             /**
-             * Percorrendo ArrayList do tipo Entrada, para inserir as informações
-             * na tabela do BD movimentação_entrada
+             * Percorrendo ArrayList do tipo Entrada, para inserir as
+             * informações na tabela do BD movimentação_entrada
              */
             for (Entrada e : colecao) {
                 pst.setInt(1, e.getIdEntrada());
@@ -127,7 +127,7 @@ public class EntradaDAO {
         int qtdAtual = 0, somaQtd = 0, qtdMaxima;
         boolean validar = false;
         conecta.conexao();
-        conecta.executaSQL("select * from produto where id_produto =" + idProduto + "");
+        conecta.executaSQL("select QTD_ESTOQUE,QTD_MAXIMO  from produto where id_produto =" + idProduto + "");
         try {
             conecta.rs.first();
             qtdAtual = conecta.rs.getInt("QTD_ESTOQUE");
@@ -153,14 +153,14 @@ public class EntradaDAO {
      */
     public int calcularQuantidadeEstoque(int idProduto, int qtdItem) {
 
-        int qtdAtual = 0, somaQtd = 0, qtdMaxima;
+        int qtdAtual = 0, somaQtd = 0;
 
         conecta.conexao();
-        conecta.executaSQL("select * from produto where id_produto =" + idProduto + "");
+        conecta.executaSQL("select QTD_ESTOQUE,QTD_MAXIMO from produto where id_produto =" + idProduto + "");
         try {
             conecta.rs.first();
             qtdAtual = conecta.rs.getInt("QTD_ESTOQUE");
-            qtdMaxima = conecta.rs.getInt("QTD_MAXIMO");
+//            qtdMaxima = conecta.rs.getInt("QTD_MAXIMO");
             somaQtd = qtdAtual + qtdItem;
 
         } catch (SQLException ex) {

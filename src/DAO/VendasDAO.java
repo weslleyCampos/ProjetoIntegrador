@@ -42,7 +42,7 @@ public class VendasDAO {
             pst.setInt(2, venda.getIdProduto());
             pst.setString(3, venda.getDataSaida());
             pst.setDouble(4, venda.getPrecoTotal());
-            pst.setInt(5,(atual- venda.getQtdItem()));
+            pst.setInt(5,(venda.getQtdItem()));
             pst.execute();
             pst.close();
 

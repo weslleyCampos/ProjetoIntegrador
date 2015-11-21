@@ -52,7 +52,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         subMenuVendas = new javax.swing.JMenuItem();
         subMenuEntradaProduto = new javax.swing.JMenuItem();
         subMenucliene = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
         jMenuSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -153,9 +152,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jMenuAtividades.add(subMenucliene);
 
         jMenuBar1.add(jMenuAtividades);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
 
         jMenuSair.setText("Sair");
         jMenuSair.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -338,7 +334,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenuAtividades;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuSair;

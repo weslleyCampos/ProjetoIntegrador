@@ -125,9 +125,6 @@ public class ProdutosDAO {
 
         } catch (SQLException ex) {
             System.out.println("não foi possivel atualização ");
-        } catch (NullPointerException ex) {
-            System.out.println("dao Atualizar não inicializado");
-
         }
         return at;
     }

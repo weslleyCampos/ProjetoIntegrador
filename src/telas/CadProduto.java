@@ -493,7 +493,7 @@ public final class CadProduto extends javax.swing.JFrame {
         est.setQtdMax(Integer.parseInt(txtQtdMax.getText()));
         est.setQtdMin(Integer.parseInt(txtQtdMin.getText()));
 
-        if (comparaDesc.equals(txtDescricao.getText()) || comparapreco.equals(txtPreco.getText()) || comparaQtdMax.equals(est.getQtdMax())
+        if (comparaDesc.equals(txtDescricao.getText()) || Double.parseDouble(comparapreco)==(Double.parseDouble(txtPreco.getText())) || comparaQtdMax.equals(est.getQtdMax())
                 || comparaQtdMin.equals(est.getQtdMin())) {
             JOptionPane.showMessageDialog(this, "Não foram realizadas alterações");
         } else {

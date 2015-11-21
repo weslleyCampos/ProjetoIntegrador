@@ -65,6 +65,25 @@ public class ProdutosDAO {
 
     }
 
+    public boolean validaQuantidadeMaxima(int idProduto) {
+
+        int qtdAtual = 0;
+        boolean possui = false;
+        conecta.conexao();
+        conecta.executaSQL("select * from produto where id_produto =" + idProduto + "");
+        try {
+            conecta.rs.first();
+            qtdAtual = conecta.rs.getInt("QTD_ESTOQUE");
+            if (qtdAtual > 0) {
+                possui = true;
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha validação de quantidade \n" + ex);
+        }
+        return possui;
+    }
+
     public void delete(Produtos del) {
         conecta.conexao();
         try {
@@ -75,7 +94,7 @@ public class ProdutosDAO {
             stm.setInt(1, del.getCodProd());
 
             stm.execute();
-            JOptionPane.showMessageDialog(null, "produto escluido com sucesso ");
+            JOptionPane.showMessageDialog(null, "Produto excluido com sucesso ");
 
         } catch (SQLException ex) {
             System.out.println("Erro ao obter valores SQL" + ex.getMessage());

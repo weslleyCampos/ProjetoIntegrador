@@ -368,9 +368,10 @@ public final class CadProduto extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
+           boolean contem = est.validaQtd(idprod);
         int saida = JOptionPane.showOptionDialog(null, "Deseja deletar esse Item ?!", null, JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
-        boolean contem = est.validaQtd(idprod);
+      
 
         if (JOptionPane.YES_OPTION == saida) {
 
@@ -445,6 +446,7 @@ public final class CadProduto extends javax.swing.JFrame {
         } //        setando valores em variaveis
         int qtdMax = Integer.parseInt(txtQtdMax.getText());
         int qtdMin = Integer.parseInt(txtQtdMin.getText());
+        
         if ((qtdMax > 0) && (qtdMin > 0)) {
 
             if (qtdMax > qtdMin) {

@@ -372,17 +372,23 @@ public final class CadProduto extends javax.swing.JFrame {
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
         boolean contem = est.validaQtd(idprod);
 
-        if (JOptionPane.YES_OPTION == saida && idprod!=null && contem ==false ) {
-            est.setCodProd(idprod);
-            est.deletProd(est);
-            limpaCampos();
-             preencheTabela(est.preencheTab());
-        }
-        else{
-            JOptionPane.showMessageDialog(null, "Produto contêm unidades em estoque. \nImpossível deletar produto!! ");
-        }
-       
+        if (JOptionPane.YES_OPTION == saida) {
 
+          
+            if (idprod != null) {
+
+                if (contem == false) {
+                    est.setCodProd(idprod);
+                    est.deletProd(est);
+                    limpaCampos();
+                    preencheTabela(est.preencheTab());
+                } else {
+
+                    JOptionPane.showMessageDialog(null, "Produto contêm unidades em estoque. \nImpossível deletar produto!! ");
+                }
+            } 
+       
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void tbExibeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbExibeMouseClicked
@@ -394,11 +400,11 @@ public final class CadProduto extends javax.swing.JFrame {
         txtQtdMin.setText(tbExibe.getValueAt(indiceLinha, 5).toString());
         txtcodProduto.setText(idprod.toString());
         est.setCodProd(idprod);
-        
-        comparaDesc=txtDescricao.getText();
-        comparapreco= txtPreco.getText();
-        comparaQtdMax= txtQtdMax.getText();
-        comparaQtdMin= txtQtdMin.getText();
+
+        comparaDesc = txtDescricao.getText();
+        comparapreco = txtPreco.getText();
+        comparaQtdMax = txtQtdMax.getText();
+        comparaQtdMin = txtQtdMin.getText();
 
 //    est.setDescricao(txtDescricao.getText());
 //    dao.consultarIdProduto(est);
@@ -437,16 +443,27 @@ public final class CadProduto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos");
 
         } //        setando valores em variaveis
-        else {
-            String Descricao = (txtDescricao.getText());
-            double preco = (Double.parseDouble(txtPreco.getText()));
-            int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
-            int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
+        int qtdMax = Integer.parseInt(txtQtdMax.getText());
+        int qtdMin = Integer.parseInt(txtQtdMin.getText());
+        if ((qtdMax > 0) && (qtdMin > 0)) {
 
-            dao.buscarCodigModelo(valorcombo);
-            Produtos e = new Produtos(Descricao,preco , qtdmaximo, qtdminimo, dao.buscarCodigModelo(valorcombo));
-            est.salvarestoque(e);
-            limpaCampos();
+            if (qtdMax > qtdMin) {
+                String Descricao = (txtDescricao.getText());
+                double preco = (Double.parseDouble(txtPreco.getText()));
+                int qtdminimo = (Integer.parseInt(txtQtdMin.getText()));
+                int qtdmaximo = (Integer.parseInt(txtQtdMax.getText()));
+
+                dao.buscarCodigModelo(valorcombo);
+                Produtos e = new Produtos(Descricao, preco, qtdmaximo, qtdminimo, dao.buscarCodigModelo(valorcombo));
+                est.salvarestoque(e);
+                limpaCampos();
+                preencheTabela(est.preencheTab());
+            } else {
+                JOptionPane.showMessageDialog(null, "Quantidade máxima não pode ser inferior a minima");
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Quantidade deve ser valor positivo ");
         }
 
 
@@ -474,14 +491,13 @@ public final class CadProduto extends javax.swing.JFrame {
         est.setQtdMax(Integer.parseInt(txtQtdMax.getText()));
         est.setQtdMin(Integer.parseInt(txtQtdMin.getText()));
 
-        if(comparaDesc.equals(txtDescricao.getText())||comparapreco.equals(txtPreco.getText())||comparaQtdMax.equals(est.getQtdMax())
-                ||comparaQtdMin.equals(est.getQtdMin())){
+        if (comparaDesc.equals(txtDescricao.getText()) || comparapreco.equals(txtPreco.getText()) || comparaQtdMax.equals(est.getQtdMax())
+                || comparaQtdMin.equals(est.getQtdMin())) {
             JOptionPane.showMessageDialog(this, "Não foram realizadas alterações");
-        }
-        else{
-        est.atualizaDados(est);
-        limpaCampos();
-        preencheTabela(est.preencheTab());
+        } else {
+            est.atualizaDados(est);
+            limpaCampos();
+            preencheTabela(est.preencheTab());
     }//GEN-LAST:event_btnAtualizaActionPerformed
     }
     private void tbExibeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbExibeKeyReleased

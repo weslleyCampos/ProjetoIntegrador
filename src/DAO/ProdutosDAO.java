@@ -110,11 +110,15 @@ public class ProdutosDAO {
         try {
 //          string sql que recebe como parametros os oos valores de objeto estoque e insere na tabela produtos
 //                  onde id_produtos for igual ao retorni
-            String sql = ("update produto set DESCRICAO_PRODUTO=?, ID_MODELO=? where ID_PRODUTO=? ");
+            String sql = ("update produto set DESCRICAO_PRODUTO=?, ID_MODELO=?,PRECO_UNITARIO =?,QTD_MINIMO=?,"
+                    + "QTD_MAXIMO=? where ID_PRODUTO=? ");
             stm = conecta.conn.prepareStatement(sql);
             stm.setString(1, at.getDescricao());
             stm.setInt(2, at.getIdModelo());
-            stm.setInt(3, at.getCodProd());
+            stm.setDouble(3, at.getPreco());
+            stm.setInt(4, at.getQtdMin());
+            stm.setInt(5, at.getQtdMax());
+            stm.setInt(6, at.getCodProd());
 
             stm.execute();
             JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso !!");

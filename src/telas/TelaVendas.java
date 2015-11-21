@@ -5,7 +5,9 @@
  */
 package telas;
 
+import DAO.ProdutosDAO;
 import DAO.VendasDAO;
+import classes.Produtos;
 import java.sql.SQLException;
 import java.util.Date;
 import java.text.DateFormat;
@@ -29,7 +31,8 @@ public class TelaVendas extends javax.swing.JFrame {
     String[] colunasCarrinho = new String[]{"Código", "Descricao Produto", "Qantidade", "Preço"}; // Colunas da tabela carrinho
     VendasDAO vendasDAO = new VendasDAO();
     ConectaBanco conecta = new ConectaBanco();
-
+    Produtos est= new Produtos();
+    ProdutosDAO daoP= new ProdutosDAO();
     /**
      * Creates new form Vendas
      */

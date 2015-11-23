@@ -135,7 +135,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jMenuAtividades.add(subMenuVendas);
 
-        subMenuEntradaProduto.setText("Entrada de Produtos");
+        subMenuEntradaProduto.setText("Entrada de Estoque");
         subMenuEntradaProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 subMenuEntradaProdutoActionPerformed(evt);
